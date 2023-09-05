@@ -11,6 +11,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ArchitectureDirectoryComponent } from './architecture-directory/architecture-directory.component';
 import { MusicDirectoryComponent } from './music-directory/music-directory.component';
 import { GameDesignComponent } from './game-design/game-design.component';
+import { BandsClient } from '../api.generated.clients'
 
 @NgModule({
   declarations: [
@@ -20,10 +21,10 @@ import { GameDesignComponent } from './game-design/game-design.component';
     FetchDataComponent, //Remove
     ArchitectureDirectoryComponent,
     MusicDirectoryComponent,
-    GameDesignComponent
+    GameDesignComponent,
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    BrowserModule,
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
@@ -34,7 +35,10 @@ import { GameDesignComponent } from './game-design/game-design.component';
       { path: 'music-directory', component: MusicDirectoryComponent },
     ])
   ],
-  providers: [],
+  //Newly generated clients must be added here to be accessible to components.
+  providers: [
+    BandsClient
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
