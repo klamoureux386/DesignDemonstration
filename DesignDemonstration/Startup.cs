@@ -13,6 +13,12 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddOpenApiDocument();
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
 ConfigureServices(builder.Services);
 
 var app = builder.Build();
@@ -61,13 +67,6 @@ app.Run();
 
 void ConfigureServices(IServiceCollection services)
 {
-    // Add services to the container.
-    services.AddControllersWithViews();
-    services.AddEndpointsApiExplorer();
-    services.AddOpenApiDocument();
-
-    services.AddDatabaseDeveloperPageExceptionFilter();
-
     // Register the DbContext.
     var folder = Environment.SpecialFolder.LocalApplicationData;
     var path = Environment.GetFolderPath(folder);
@@ -75,9 +74,6 @@ void ConfigureServices(IServiceCollection services)
 
     builder.Services.AddDbContext<DataContext>(options =>
       options.UseSqlite(builder.Configuration.GetConnectionString($"Data Source={DbPath}")));
-
-    // Register the Swagger services.
-    services.AddSwaggerDocument();
 
     //https://www.c-sharpcorner.com/article/automapper-in-asp-net-core-7-web-api/
     // Register AutoMapper.

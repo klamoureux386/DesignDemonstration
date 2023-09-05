@@ -1,6 +1,6 @@
 ﻿{
   "runtime": "Net70",
-  "defaultVariables": "CSharpOutputPath=..\\Client.CSharp",
+  "defaultVariables": "CSharpOutputPath=/Client.CSharp",
   "documentGenerator": {
     "aspNetCoreToOpenApi": {
       "project": "DesignDemonstration.csproj",
@@ -169,7 +169,7 @@
       "useTransformOptionsMethod": false,
       "useTransformResultMethod": false,
       "generateDtoTypes": true,
-      "operationGenerationMode": "MultipleClientsFromPathSegments",
+      "operationGenerationMode": "MultipleClientsFromOperationId",
       "markOptionalProperties": false,
       "generateCloneMethod": false,
       "typeStyle": "Class",
@@ -194,7 +194,7 @@
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "../ClientApp/src/api.generated.clients.ts"
+      "output": "ClientApp/src/api.generated.clients.ts"
     }
   }
 }

@@ -27,22 +27,24 @@ namespace DesignDemonstration.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<BandDTO> Get()
+        //[HttpGet]
+        //public async Task<BandDTO> Get()
+        //{
+        //    var band = await _bandsService.GetBand(1);
+
+        //    var dto = _mapper.Map<BandDTO>(band);
+
+        //    return dto;
+        //}
+
+        [HttpGet("{id}")]
+        public async Task<BandDTO> Get(int id)
         {
-            var band = await _bandsService.GetBand(1);
+            var band = await _bandsService.GetBand(id);
 
             var dto = _mapper.Map<BandDTO>(band);
 
             return dto;
-        }
-
-        [HttpGet("{id}")]
-        public async Task<Band> Get(int id)
-        {
-            var band = await _bandsService.GetBand(id);
-
-            return band;
         }
 
         //[HttpGet("{ids}")]

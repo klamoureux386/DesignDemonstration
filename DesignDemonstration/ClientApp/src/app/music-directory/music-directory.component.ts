@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BandDTO, BandsClient } from '../../api.generated.clients';
 
 @Component({
   selector: 'app-music-directory',
@@ -7,9 +8,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MusicDirectoryComponent implements OnInit {
 
-  constructor() { }
+  private bandsClient: BandsClient
+  public band : BandDTO = new BandDTO();
+
+  constructor(bandsClient: BandsClient) {
+    this.bandsClient = bandsClient;
+   }
 
   ngOnInit(): void {
+    this.bandsClient.get(1).subscribe(res => {
+      this.band = res
+    },
+    error => {
+
+    });
   }
 
 }
