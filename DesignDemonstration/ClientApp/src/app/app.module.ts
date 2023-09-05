@@ -28,6 +28,7 @@ import { GameDesignComponent } from './game-design/game-design.component';
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: 'fetch', component: FetchDataComponent }, //Remove
       { path: 'game-design', component: GameDesignComponent },
       { path: 'architecture-directory', component: ArchitectureDirectoryComponent },
       { path: 'music-directory', component: MusicDirectoryComponent },

@@ -4,20 +4,24 @@ namespace DesignDemonstration.Entities
 {
     public class DataContext : DbContext
     {
-        public DataContext(DbContextOptions<DataContext> options) 
-            : base(options) 
-        { 
-        
-        }
-
+        public DbSet<Album> Albums { get; set; }
         public DbSet<Band> Bands { get; set; }
         public DbSet<Musician> Musicians { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public string DbPath { get; }
+
+        public DataContext(DbContextOptions<DataContext> options) 
+            : base(options) 
         {
-            modelBuilder.Entity<Band>().ToTable("Band");
-            modelBuilder.Entity<Musician>().ToTable("Musicians");
+            var folder = Environment.SpecialFolder.LocalApplicationData;
+            var path = Environment.GetFolderPath(folder);
+            DbPath = System.IO.Path.Join(path, "music.db");
         }
+
+        // The following configures EF to create a Sqlite database file in the
+        // special "local" folder for your platform.
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+            => options.UseSqlite($"Data Source={DbPath}");
 
     }
 }
