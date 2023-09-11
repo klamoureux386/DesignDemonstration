@@ -11,7 +11,8 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ArchitectureDirectoryComponent } from './architecture-directory/architecture-directory.component';
 import { MusicDirectoryComponent } from './music-directory/music-directory.component';
 import { GameDesignComponent } from './game-design/game-design.component';
-import { BandsClient } from '../api.generated.clients'
+import { ToastrModule } from 'ngx-toastr';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { BandsClient } from '../api.generated.clients'
     ArchitectureDirectoryComponent,
     MusicDirectoryComponent,
     GameDesignComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,12 +35,13 @@ import { BandsClient } from '../api.generated.clients'
       { path: 'game-design', component: GameDesignComponent },
       { path: 'architecture-directory', component: ArchitectureDirectoryComponent },
       { path: 'music-directory', component: MusicDirectoryComponent },
-    ])
+      { path: '**', component: PageNotFoundComponent, pathMatch: 'full' }
+    ]),
+    ToastrModule.forRoot({
+      positionClass :'toast-top-right'
+    }),
   ],
-  //Newly generated clients must be added here to be accessible to components.
-  providers: [
-    BandsClient
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

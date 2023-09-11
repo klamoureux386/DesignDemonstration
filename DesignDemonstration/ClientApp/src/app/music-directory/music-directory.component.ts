@@ -1,27 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { BandDTO, BandsClient } from '../../api.generated.clients';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-music-directory',
   templateUrl: './music-directory.component.html',
   styleUrls: ['./music-directory.component.css'],
+  providers: [BandsClient]
 })
 export class MusicDirectoryComponent implements OnInit {
 
-  private bandsClient: BandsClient;
-  public band : BandDTO = new BandDTO();
+  public bands : BandDTO[] = [];
 
   constructor(
-    bandsClient: BandsClient) {
-    this.bandsClient = bandsClient;
+    public bandsClient: BandsClient,
+    private toastr: ToastrService
+    ) {
    }
 
   ngOnInit(): void {
-
     //https://rxjs.dev/deprecations/subscribe-arguments
-    this.bandsClient.get(1).subscribe({
-      next: (res) => this.band = res,
-      //error: (err) => this.toastr.error(err.message),
+    this.bandsClient.getAll().subscribe({
+      next: (res) => this.bands = res,
+      error: (err) => this.toastr.error(err.message),
     });
   }
 

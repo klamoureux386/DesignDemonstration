@@ -1,10 +1,11 @@
-﻿using DesignDemonstration.Entities;
+﻿using DesignDemonstration.DTOs;
 
 namespace DesignDemonstration.Interfaces
 {
     public interface IBandsService
     {
-        public Task<Band> GetBand(int id);
-        public IQueryable<Band> GetBands(IEnumerable<int> ids);
+        public Task<List<BandDTO>> GetAllBands();
+        public Task<BandDTO> GetBand(int id);
+        public Task<List<BandDTO>> GetBands(IEnumerable<int> ids);
     }
 }

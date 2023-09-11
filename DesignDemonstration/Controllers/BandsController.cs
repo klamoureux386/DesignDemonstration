@@ -10,41 +10,34 @@ using Microsoft.EntityFrameworkCore;
 namespace DesignDemonstration.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class BandsController : ControllerBase
     {
         private readonly ILogger<BandsController> _logger;
         private readonly IBandsService _bandsService;
-        private readonly IMapper _mapper;
 
         public BandsController(ILogger<BandsController> logger,
-                IBandsService bandsService,
-                IMapper mapper
+                IBandsService bandsService
             )
         {
             _logger = logger;
             _bandsService = bandsService;
-            _mapper = mapper;
         }
 
-        //[HttpGet]
-        //public async Task<BandDTO> Get()
-        //{
-        //    var band = await _bandsService.GetBand(1);
+        [HttpGet]
+        public async Task<List<BandDTO>> GetAll()
+        {
+            var bands = await _bandsService.GetAllBands();
 
-        //    var dto = _mapper.Map<BandDTO>(band);
-
-        //    return dto;
-        //}
+            return bands;
+        }
 
         [HttpGet("{id}")]
         public async Task<BandDTO> Get(int id)
         {
             var band = await _bandsService.GetBand(id);
 
-            var dto = _mapper.Map<BandDTO>(band);
-
-            return dto;
+            return band;
         }
 
         //[HttpGet("{ids}")]
