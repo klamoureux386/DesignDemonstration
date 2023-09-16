@@ -1,7 +1,6 @@
 using DesignDemonstration.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
-using DesignDemonstration.Data;
 using NSwag.CodeGeneration.TypeScript;
 using NSwag;
 using System;
@@ -10,6 +9,7 @@ using NSwag.CodeGeneration.CSharp;
 using DesignDemonstration.Interfaces;
 using DesignDemonstration.Services;
 using System.Text.Json.Serialization;
+using DesignDemonstration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +48,8 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
 
     var context = services.GetRequiredService<DataContext>();
+    //Delete database then recreate to accommodate any changes to DbInitializer
+    context.Database.EnsureDeleted();
     context.Database.EnsureCreated();
     DbInitializer.Initialize(context);
 }

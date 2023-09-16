@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DesignDemonstration.Entities
 {
@@ -11,7 +11,9 @@ namespace DesignDemonstration.Entities
         public string FirstName { get; set; }
         public string? MiddleName { get; set; }
         public string LastName { get; set; }
+
         public ICollection<Album> Albums { get; set; } = new List<Album>();
         public ICollection<Band> Bands { get; set; } = new List<Band>();
+        public ICollection<Song> Songs { get; set; } = new List<Song>();
     }
 }

@@ -13,6 +13,7 @@ import { MusicDirectoryComponent } from './music-directory/music-directory.compo
 import { GameDesignComponent } from './game-design/game-design.component';
 import { ToastrModule } from 'ngx-toastr';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { BandPageComponent } from './band-page/band-page.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     MusicDirectoryComponent,
     GameDesignComponent,
     PageNotFoundComponent,
+    BandPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,8 +37,12 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
       { path: 'game-design', component: GameDesignComponent },
       { path: 'architecture-directory', component: ArchitectureDirectoryComponent },
       { path: 'music-directory', component: MusicDirectoryComponent },
-      { path: '**', component: PageNotFoundComponent, pathMatch: 'full' }
-    ]),
+      { path: 'music-directory/band/:id', component: BandPageComponent },
+      { path: '**', component: PageNotFoundComponent, pathMatch: 'full' },
+    ],
+    //https://itnext.io/bind-route-info-to-component-inputs-new-router-feature-1d747e559dc4
+    //Allows for direct Component @Input from route parameters
+    { bindToComponentInputs: true }),
     ToastrModule.forRoot({
       positionClass :'toast-top-right'
     }),
