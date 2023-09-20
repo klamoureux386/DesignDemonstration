@@ -13,12 +13,13 @@ namespace DesignDemonstration
             //Bands
             AddBands(context);
 
-            Band NoKnife = context.Bands.First(b => b.Name == "No Knife");
+            Band NoKnife = context.Bands.First(b => b.Id == 1);
+            Band RivalSchools = context.Bands.First(b => b.Id == 2);
 
             //Albums
             AddAlbums(context);
 
-            //Musicians -- Too many to store as static references, look up in Songs by Band/Album.
+            //Musicians
             AddMusicians(context);
 
             //Songs
@@ -55,12 +56,21 @@ namespace DesignDemonstration
 
                 var albums = new List<Album>();
 
+                //No Knife
                 albums.AddRange(new List<Album>
                 {
-                    new Album{ Id = 1, Title = "Drunk on the Moon", Bands = new List<Band> { NoKnife } },
-                    new Album{ Id = 2, Title = "Hit Man Dreams", Bands = new List<Band> { NoKnife } },
-                    new Album{ Id = 3, Title = "Fire in the City of Automatons", Bands = new List<Band> { NoKnife } },
-                    new Album{ Id = 4, Title = "Riot for Romance", Bands = new List<Band> { NoKnife } },
+                    new Album { Id = 1, Title = "Drunk on the Moon", Bands = new List<Band> { NoKnife } },
+                    new Album { Id = 2, Title = "Hit Man Dreams", Bands = new List<Band> { NoKnife } },
+                    new Album { Id = 3, Title = "Fire in the City of Automatons", Bands = new List<Band> { NoKnife } },
+                    new Album { Id = 4, Title = "Riot for Romance", Bands = new List<Band> { NoKnife } },
+                });
+
+                //Rival Schools
+                albums.AddRange(new List<Album>
+                { 
+                    new Album { Id = 5, Title = "United by Fate", Bands = new List<Band> { RivalSchools } },
+                    new Album { Id = 6, Title = "Pedals", Bands = new List<Band> { RivalSchools } },
+                    new Album { Id = 7, Title = "Found", Bands = new List<Band> { RivalSchools } },
                 });
 
                 context.Albums.AddRange(albums);
@@ -78,20 +88,35 @@ namespace DesignDemonstration
 
                 var musicians = new List<Musician>();
 
+                //No Knife
                 Album drunkOnTheMoon = context.Albums.First(a => a.Title == "Drunk on the Moon" && a.Bands.Any(b => b.Id == NoKnife.Id));
                 Album hitManDreams = context.Albums.First(a => a.Title == "Hit Man Dreams" && a.Bands.Any(b => b.Id == NoKnife.Id));
                 Album fireInTheCity = context.Albums.First(a => a.Title == "Fire in the City of Automatons" && a.Bands.Any(b => b.Id == NoKnife.Id));
                 Album riotForRomance = context.Albums.First(a => a.Title == "Riot for Romance" && a.Bands.Any(b => b.Id == NoKnife.Id));
 
                 musicians.AddRange(new List<Musician>
-            {
-                new Musician{ Id = 1, FirstName = "Mitch", LastName = "Wilson", Bands = new List<Band> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon, hitManDreams, fireInTheCity, riotForRomance } },
-                new Musician{ Id = 2, FirstName = "Brian", LastName = "Desjean", Bands = new List<Band> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon, hitManDreams, fireInTheCity, riotForRomance } },
-                new Musician{ Id = 3, FirstName = "Ryan", LastName = "Ferguson", Bands = new List<Band> { NoKnife }, Albums = new List<Album> { hitManDreams, fireInTheCity, riotForRomance } },
-                new Musician{ Id = 4, FirstName = "Chris", LastName = "Prescott", Bands = new List<Band> { NoKnife }, Albums = new List<Album> { fireInTheCity, riotForRomance } },
-                new Musician{ Id = 5, FirstName = "Ike", LastName = "Zaremba", Bands = new List<Band> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon, hitManDreams } },
-                new Musician{ Id = 6, FirstName = "Aaron", LastName = "Mancini", Bands = new List<Band> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon } },
-            });
+                {
+                    new Musician{ Id = 1, FirstName = "Mitch", LastName = "Wilson", Bands = new List<Band> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon, hitManDreams, fireInTheCity, riotForRomance } },
+                    new Musician{ Id = 2, FirstName = "Brian", LastName = "Desjean", Bands = new List<Band> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon, hitManDreams, fireInTheCity, riotForRomance } },
+                    new Musician{ Id = 3, FirstName = "Ryan", LastName = "Ferguson", Bands = new List<Band> { NoKnife }, Albums = new List<Album> { hitManDreams, fireInTheCity, riotForRomance } },
+                    new Musician{ Id = 4, FirstName = "Chris", LastName = "Prescott", Bands = new List<Band> { NoKnife }, Albums = new List<Album> { fireInTheCity, riotForRomance } },
+                    new Musician{ Id = 5, FirstName = "Ike", LastName = "Zaremba", Bands = new List<Band> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon, hitManDreams } },
+                    new Musician{ Id = 6, FirstName = "Aaron", LastName = "Mancini", Bands = new List<Band> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon } },
+                });
+
+                //Rival Schools
+                Album unitedByFate = context.Albums.First(a => a.Title == "United by Fate" && a.Bands.Any(b => b.Id == RivalSchools.Id));
+                Album pedals = context.Albums.First(a => a.Title == "Pedals" && a.Bands.Any(b => b.Id == RivalSchools.Id));
+                Album found = context.Albums.First(a => a.Title == "Found" && a.Bands.Any(b => b.Id == RivalSchools.Id));
+
+                musicians.AddRange(new List<Musician>
+                {
+                    new Musician{ Id = 7, FirstName = "Walter", LastName = "Schreifels", Bands = new List<Band> { RivalSchools }, Albums = new List<Album> { unitedByFate, pedals, found } },
+                    new Musician{ Id = 8, FirstName = "Cache", LastName = "Tolman", Bands = new List<Band> { RivalSchools }, Albums = new List<Album> { unitedByFate, pedals, found } },
+                    new Musician{ Id = 9, FirstName = "Sam", LastName = "Siegler", Bands = new List<Band> { RivalSchools }, Albums = new List<Album> { unitedByFate, pedals, found } },
+                    new Musician{ Id = 10, FirstName = "Ian", LastName = "Love", Bands = new List<Band> { RivalSchools }, Albums = new List<Album> { unitedByFate, pedals, found } },
+                    new Musician{ Id = 11, FirstName = "Chris", LastName = "Traynor", Bands = new List<Band> { RivalSchools } }
+                });
 
                 context.Musicians.AddRange(musicians);
                 context.SaveChanges();
@@ -107,6 +132,7 @@ namespace DesignDemonstration
                 }
 
                 AddNoKnifeSongs(context);
+                AddRivalSchoolsSongs(context);
 
                 return context.Songs.ToList();
 
@@ -223,6 +249,11 @@ namespace DesignDemonstration
 
                 AddSongList(context, NoKnife, riotForRomance, riotForRomanceSongs);
 
+            }
+
+            void AddRivalSchoolsSongs(DataContext context) 
+            {
+                return;
             }
         }
     }
