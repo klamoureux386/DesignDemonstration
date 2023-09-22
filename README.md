@@ -7,3 +7,4 @@ Stack & Tools:
 - Angular 16
 - OpenAPI + NSwag for auto-generated .ts clients
 - SQLite for an in-memory db during development
+- NgBootstrap
