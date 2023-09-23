@@ -12,6 +12,11 @@ export class MusicDirectoryComponent implements OnInit {
 
   public bands : BandDTO[] = [];
 
+  public images : string[] = [
+    "../../assets/shiner-egg.jpg",
+    "../../assets/dinosaurIcon.png"
+  ];
+
   constructor(
     public bandsClient: BandsClient,
     private toastr: ToastrService

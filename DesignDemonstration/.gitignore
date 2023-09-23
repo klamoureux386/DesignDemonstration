@@ -78,7 +78,7 @@ ipch/
 *.cachefile
 
 #Angular cache files
-*/.angular/cache
+*/.angular/cache/*
 
 # Visual Studio profiler
 *.psess

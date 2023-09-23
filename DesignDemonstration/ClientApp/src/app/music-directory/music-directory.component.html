@@ -1,5 +1,26 @@
 <p>music-directory works!</p>
 
+<ngb-carousel *ngIf="images">
+	<ng-template ngbSlide>
+		<div class="picsum-img-wrapper">
+			<img [src]="images[0]" style="height: 200px; width: 400px" alt="Random first slide" />
+		</div>
+		<div class="carousel-caption">
+			<h3>First slide label</h3>
+			<p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+		</div>
+	</ng-template>
+	<ng-template ngbSlide>
+		<div class="picsum-img-wrapper">
+			<img [src]="images[1]" alt="Random second slide" />
+		</div>
+		<div class="carousel-caption">
+			<h3>Second slide label</h3>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+		</div>
+	</ng-template>
+</ngb-carousel>
+
 <ul>
     <li *ngFor="let band of bands">
         <a href='/music-directory/band/{{band.id}}'>{{band.name}}</a>

@@ -14,6 +14,7 @@ import { GameDesignComponent } from './game-design/game-design.component';
 import { ToastrModule } from 'ngx-toastr';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { BandPageComponent } from './band-page/band-page.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { BandPageComponent } from './band-page/band-page.component';
     ToastrModule.forRoot({
       positionClass :'toast-top-right'
     }),
+    NgbModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
