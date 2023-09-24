@@ -1,0 +1,14 @@
+<p>featured-artists works!</p>
+
+<!-- To do: use ngb carousel as base for multi-page featured artist section -->
+<ngb-carousel>
+	<ng-template ngbSlide *ngFor="let info of featuredArtistsInfo">
+		<div>
+			<img [src]="info.imgSrc" class="album-img"  alt="Random first slide" />
+		</div>
+		<div class="carousel-caption">
+			<h3>{{info.bandName}}</h3>
+			<p>{{info.description}}</p>
+		</div>
+	</ng-template>
+</ngb-carousel>

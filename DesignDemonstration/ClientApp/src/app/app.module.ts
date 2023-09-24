@@ -15,6 +15,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { BandPageComponent } from './band-page/band-page.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FeaturedArtistsComponent } from './music-directory/featured-artists/featured-artists.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     GameDesignComponent,
     PageNotFoundComponent,
     BandPageComponent,
+    FeaturedArtistsComponent,
   ],
   imports: [
     BrowserModule,
