@@ -9,6 +9,7 @@ namespace DesignDemonstration.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Name { get; set; } = "";
+        public string YearsActive { get; set; } = "";
 
         //Many-to-Many Join Tables
         public ICollection<AlbumBands> AlbumBands { get; set; } = new List<AlbumBands>();

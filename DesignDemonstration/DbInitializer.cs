@@ -24,19 +24,29 @@ namespace DesignDemonstration
             AddSongs(context);
 
 
-            List<User> AddUsers(DataContext context) 
-            { 
+            void AddUsers(DataContext context) 
+            {
+                if (context.Users.Any()) 
+                {
+                    return; // DB has been seeded
+                }
+
                 var users = new List<User>();
 
-                return users;
+                users.AddRange( new List<User>() {
+                    new User() { Id = 1, Username = "Halifex", Email = "klamoureux386@gmail.com", Type = "Staff", DisplayName = "Kyle Lamoureux" }
+                });
+
+                context.AddRange(users);
+                context.SaveChanges();
             }
 
-            List<Bands> AddBands(DataContext context)
+            void AddBands(DataContext context)
             {
                 // Look for any Bands.
                 if (context.Bands.Any())
                 {
-                    return context.Bands.ToList();   // DB has been seeded
+                    return;
                 }
 
                 var bands = new List<Bands>()
@@ -48,15 +58,13 @@ namespace DesignDemonstration
 
                 context.Bands.AddRange(bands);
                 context.SaveChanges();
-
-                return bands;
             }
 
-            List<Album> AddAlbums(DataContext context)
+            void AddAlbums(DataContext context)
             {
                 if (context.Albums.Any())
                 {
-                    return context.Albums.ToList();
+                    return;
                 }
 
                 var albums = new List<Album>();
@@ -78,17 +86,15 @@ namespace DesignDemonstration
                     new Album { Id = 7, Title = "Found", Bands = new List<Bands> { RivalSchools } },
                 });
 
-                context.Albums.AddRange(albums);
+                context.AddRange(albums);
                 context.SaveChanges();
-
-                return albums;
             }
 
-            List<Musician> AddMusicians(DataContext context)
+            void AddMusicians(DataContext context)
             {
                 if (context.Musicians.Any())
                 {
-                    return context.Musicians.ToList();
+                    return;
                 }
 
                 var musicians = new List<Musician>();
@@ -101,12 +107,12 @@ namespace DesignDemonstration
 
                 musicians.AddRange(new List<Musician>
                 {
-                    new Musician{ Id = 1, FirstName = "Mitch", LastName = "Wilson", Bands = new List<Bands> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon, hitManDreams, fireInTheCity, riotForRomance } },
-                    new Musician{ Id = 2, FirstName = "Brian", LastName = "Desjean", Bands = new List<Bands> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon, hitManDreams, fireInTheCity, riotForRomance } },
-                    new Musician{ Id = 3, FirstName = "Ryan", LastName = "Ferguson", Bands = new List<Bands> { NoKnife }, Albums = new List<Album> { hitManDreams, fireInTheCity, riotForRomance } },
-                    new Musician{ Id = 4, FirstName = "Chris", LastName = "Prescott", Bands = new List<Bands> { NoKnife }, Albums = new List<Album> { fireInTheCity, riotForRomance } },
-                    new Musician{ Id = 5, FirstName = "Ike", LastName = "Zaremba", Bands = new List<Bands> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon, hitManDreams } },
-                    new Musician{ Id = 6, FirstName = "Aaron", LastName = "Mancini", Bands = new List<Bands> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon } },
+                    new Musician{ Id = 1, FirstName = "Mitch", LastName = "Wilson", Instruments = "Guitar, vocals", Bands = new List<Bands> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon, hitManDreams, fireInTheCity, riotForRomance } },
+                    new Musician{ Id = 2, FirstName = "Brian", LastName = "Desjean", Instruments = "Bass", Bands = new List<Bands> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon, hitManDreams, fireInTheCity, riotForRomance } },
+                    new Musician{ Id = 3, FirstName = "Ryan", LastName = "Ferguson", Instruments = "Guitar, vocals", Bands = new List<Bands> { NoKnife }, Albums = new List<Album> { hitManDreams, fireInTheCity, riotForRomance } },
+                    new Musician{ Id = 4, FirstName = "Chris", LastName = "Prescott", Instruments = "Drums", Bands = new List<Bands> { NoKnife }, Albums = new List<Album> { fireInTheCity, riotForRomance } },
+                    new Musician{ Id = 5, FirstName = "Ike", LastName = "Zaremba", Instruments = "Drums", Bands = new List<Bands> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon, hitManDreams } },
+                    new Musician{ Id = 6, FirstName = "Aaron", LastName = "Mancini", Instruments = "Guitar, vocals", Bands = new List<Bands> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon } },
                 });
 
                 //Rival Schools
@@ -123,24 +129,19 @@ namespace DesignDemonstration
                     new Musician{ Id = 11, FirstName = "Chris", LastName = "Traynor", Bands = new List<Bands> { RivalSchools } }
                 });
 
-                context.Musicians.AddRange(musicians);
+                context.AddRange(musicians);
                 context.SaveChanges();
-
-                return musicians;
             }
 
-            List<Song> AddSongs(DataContext context)
+            void AddSongs(DataContext context)
             {
                 if (context.Songs.Any())
                 {
-                    return context.Songs.ToList();
+                    return;
                 }
 
                 AddNoKnifeSongs(context);
                 AddRivalSchoolsSongs(context);
-
-                return context.Songs.ToList();
-
             }
 
             //Prototype function for adding Songs which belong only to 1 album without features where all musicians contribute all of their instruments.

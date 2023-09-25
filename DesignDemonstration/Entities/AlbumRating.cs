@@ -14,7 +14,10 @@ namespace DesignDemonstration.Entities
         public int UserId { get; set; }
         [Range(0, 100)]
         public int Rating { get; set; }
+        [StringLength(30000)]
         public string? Review { get; set; }
+        [StringLength(75)]
+        public string? Tagline { get; set; }
 
         public Album Album { get; set; } = null!;
         public User User { get; set; } = null!;

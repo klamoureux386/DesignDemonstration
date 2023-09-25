@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { RouterModule, UrlMatchResult, UrlSegment } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -40,7 +40,8 @@ import { FeaturedArtistsComponent } from './music-directory/featured-artists/fea
       { path: 'game-design', component: GameDesignComponent },
       { path: 'architecture-directory', component: ArchitectureDirectoryComponent },
       { path: 'music-directory', component: MusicDirectoryComponent },
-      { path: 'music-directory/band/:id', component: BandPageComponent },
+
+      { matcher: (url) => OnlyMatchNumericBandIds(url), component: BandPageComponent },
       { path: '**', component: PageNotFoundComponent, pathMatch: 'full' },
     ],
     //https://itnext.io/bind-route-info-to-component-inputs-new-router-feature-1d747e559dc4
@@ -54,4 +55,28 @@ import { FeaturedArtistsComponent } from './music-directory/featured-artists/fea
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+
+export class AppModule { 
+
+}
+
+//{ path: 'music-directory/band/:id', component: BandPageComponent },
+//Same as above but only matches numeric bandIds. If the id params 
+export function OnlyMatchNumericBandIds(url: UrlSegment[]) : UrlMatchResult | null {
+  if (
+    url.length == 3
+    && url[0].path == 'music-directory'
+    && url[1].path == 'band'
+    && url[2].path.match(RegExp("^[0-9]"))) 
+  {
+    return {
+      consumed: url,
+      posParams: {
+        id: new UrlSegment(url[2].path, {})
+      }
+    };
+  }
+  else {
+    return null;
+  }
+}
