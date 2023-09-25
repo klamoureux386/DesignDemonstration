@@ -10,23 +10,28 @@ namespace DesignDemonstration
         //Initializes in-memory SqlLite DB.
         public static void Initialize(DataContext context)
         {
-            //Bands
+            AddUsers(context);
+
             AddBands(context);
 
-            Band NoKnife = context.Bands.First(b => b.Id == 1);
-            Band RivalSchools = context.Bands.First(b => b.Id == 2);
+            Bands NoKnife = context.Bands.First(b => b.Id == 1);
+            Bands RivalSchools = context.Bands.First(b => b.Id == 2);
 
-            //Albums
             AddAlbums(context);
 
-            //Musicians
             AddMusicians(context);
 
-            //Songs
             AddSongs(context);
 
 
-            List<Band> AddBands(DataContext context)
+            List<User> AddUsers(DataContext context) 
+            { 
+                var users = new List<User>();
+
+                return users;
+            }
+
+            List<Bands> AddBands(DataContext context)
             {
                 // Look for any Bands.
                 if (context.Bands.Any())
@@ -34,12 +39,12 @@ namespace DesignDemonstration
                     return context.Bands.ToList();   // DB has been seeded
                 }
 
-                var bands = new List<Band>()
-            {
-                new Band{ Id = 1, Name = "No Knife" },
-                new Band{ Id = 2, Name = "Rival Schools" },
-                new Band{ Id = 3, Name = "Shiner" },
-            };
+                var bands = new List<Bands>()
+                {
+                    new Bands{ Id = 1, Name = "No Knife" },
+                    new Bands{ Id = 2, Name = "Rival Schools" },
+                    new Bands{ Id = 3, Name = "Shiner" },
+                };
 
                 context.Bands.AddRange(bands);
                 context.SaveChanges();
@@ -59,18 +64,18 @@ namespace DesignDemonstration
                 //No Knife
                 albums.AddRange(new List<Album>
                 {
-                    new Album { Id = 1, Title = "Drunk on the Moon", Bands = new List<Band> { NoKnife } },
-                    new Album { Id = 2, Title = "Hit Man Dreams", Bands = new List<Band> { NoKnife } },
-                    new Album { Id = 3, Title = "Fire in the City of Automatons", Bands = new List<Band> { NoKnife } },
-                    new Album { Id = 4, Title = "Riot for Romance", Bands = new List<Band> { NoKnife } },
+                    new Album { Id = 1, Title = "Drunk on the Moon", Bands = new List<Bands> { NoKnife } },
+                    new Album { Id = 2, Title = "Hit Man Dreams", Bands = new List<Bands> { NoKnife } },
+                    new Album { Id = 3, Title = "Fire in the City of Automatons", Bands = new List<Bands> { NoKnife } },
+                    new Album { Id = 4, Title = "Riot for Romance", Bands = new List<Bands> { NoKnife } },
                 });
 
                 //Rival Schools
                 albums.AddRange(new List<Album>
                 { 
-                    new Album { Id = 5, Title = "United by Fate", Bands = new List<Band> { RivalSchools } },
-                    new Album { Id = 6, Title = "Pedals", Bands = new List<Band> { RivalSchools } },
-                    new Album { Id = 7, Title = "Found", Bands = new List<Band> { RivalSchools } },
+                    new Album { Id = 5, Title = "United by Fate", Bands = new List<Bands> { RivalSchools } },
+                    new Album { Id = 6, Title = "Pedals", Bands = new List<Bands> { RivalSchools } },
+                    new Album { Id = 7, Title = "Found", Bands = new List<Bands> { RivalSchools } },
                 });
 
                 context.Albums.AddRange(albums);
@@ -96,12 +101,12 @@ namespace DesignDemonstration
 
                 musicians.AddRange(new List<Musician>
                 {
-                    new Musician{ Id = 1, FirstName = "Mitch", LastName = "Wilson", Bands = new List<Band> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon, hitManDreams, fireInTheCity, riotForRomance } },
-                    new Musician{ Id = 2, FirstName = "Brian", LastName = "Desjean", Bands = new List<Band> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon, hitManDreams, fireInTheCity, riotForRomance } },
-                    new Musician{ Id = 3, FirstName = "Ryan", LastName = "Ferguson", Bands = new List<Band> { NoKnife }, Albums = new List<Album> { hitManDreams, fireInTheCity, riotForRomance } },
-                    new Musician{ Id = 4, FirstName = "Chris", LastName = "Prescott", Bands = new List<Band> { NoKnife }, Albums = new List<Album> { fireInTheCity, riotForRomance } },
-                    new Musician{ Id = 5, FirstName = "Ike", LastName = "Zaremba", Bands = new List<Band> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon, hitManDreams } },
-                    new Musician{ Id = 6, FirstName = "Aaron", LastName = "Mancini", Bands = new List<Band> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon } },
+                    new Musician{ Id = 1, FirstName = "Mitch", LastName = "Wilson", Bands = new List<Bands> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon, hitManDreams, fireInTheCity, riotForRomance } },
+                    new Musician{ Id = 2, FirstName = "Brian", LastName = "Desjean", Bands = new List<Bands> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon, hitManDreams, fireInTheCity, riotForRomance } },
+                    new Musician{ Id = 3, FirstName = "Ryan", LastName = "Ferguson", Bands = new List<Bands> { NoKnife }, Albums = new List<Album> { hitManDreams, fireInTheCity, riotForRomance } },
+                    new Musician{ Id = 4, FirstName = "Chris", LastName = "Prescott", Bands = new List<Bands> { NoKnife }, Albums = new List<Album> { fireInTheCity, riotForRomance } },
+                    new Musician{ Id = 5, FirstName = "Ike", LastName = "Zaremba", Bands = new List<Bands> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon, hitManDreams } },
+                    new Musician{ Id = 6, FirstName = "Aaron", LastName = "Mancini", Bands = new List<Bands> { NoKnife }, Albums = new List<Album> { drunkOnTheMoon } },
                 });
 
                 //Rival Schools
@@ -111,11 +116,11 @@ namespace DesignDemonstration
 
                 musicians.AddRange(new List<Musician>
                 {
-                    new Musician{ Id = 7, FirstName = "Walter", LastName = "Schreifels", Bands = new List<Band> { RivalSchools }, Albums = new List<Album> { unitedByFate, pedals, found } },
-                    new Musician{ Id = 8, FirstName = "Cache", LastName = "Tolman", Bands = new List<Band> { RivalSchools }, Albums = new List<Album> { unitedByFate, pedals, found } },
-                    new Musician{ Id = 9, FirstName = "Sam", LastName = "Siegler", Bands = new List<Band> { RivalSchools }, Albums = new List<Album> { unitedByFate, pedals, found } },
-                    new Musician{ Id = 10, FirstName = "Ian", LastName = "Love", Bands = new List<Band> { RivalSchools }, Albums = new List<Album> { unitedByFate, pedals, found } },
-                    new Musician{ Id = 11, FirstName = "Chris", LastName = "Traynor", Bands = new List<Band> { RivalSchools } }
+                    new Musician{ Id = 7, FirstName = "Walter", LastName = "Schreifels", Bands = new List<Bands> { RivalSchools }, Albums = new List<Album> { unitedByFate, pedals, found } },
+                    new Musician{ Id = 8, FirstName = "Cache", LastName = "Tolman", Bands = new List<Bands> { RivalSchools }, Albums = new List<Album> { unitedByFate, pedals, found } },
+                    new Musician{ Id = 9, FirstName = "Sam", LastName = "Siegler", Bands = new List<Bands> { RivalSchools }, Albums = new List<Album> { unitedByFate, pedals, found } },
+                    new Musician{ Id = 10, FirstName = "Ian", LastName = "Love", Bands = new List<Bands> { RivalSchools }, Albums = new List<Album> { unitedByFate, pedals, found } },
+                    new Musician{ Id = 11, FirstName = "Chris", LastName = "Traynor", Bands = new List<Bands> { RivalSchools } }
                 });
 
                 context.Musicians.AddRange(musicians);
@@ -138,21 +143,40 @@ namespace DesignDemonstration
 
             }
 
-            void AddSongList(DataContext context, Band band, Album album, IEnumerable<(string title, string length)> songInfo)
+            //Prototype function for adding Songs which belong only to 1 album without features where all musicians contribute all of their instruments.
+            void AddSimpleSongList(DataContext context, Bands band, Album album, IEnumerable<(string title, string length)> songInfo)
             {
-                var albumMusicians = context.Musicians.Where(m => m.Albums.Any(a => a.Id == album.Id) && m.Bands.Any(b => b.Id == band.Id)).ToList();
+                var musiciansOnAlbum = context.Musicians.Where(m => m.Albums.Any(a => a.Id == album.Id) && m.Bands.Any(b => b.Id == band.Id)).ToList();
 
                 var currentSongId = context.Songs.Any() ? context.Songs.Max(s => s.Id) + 1 : 1;
+                var currentAlbumSongJoinId = context.AlbumSongs.Any() ? context.AlbumSongs.Max(s => s.Id) + 1 : 1;
+                var currentMusicianSongJoinId = context.MusicianSongs.Any() ? context.MusicianSongs.Max(s => s.Id) + 1 : 1;
 
                 var allSongs = new List<Song>();
 
+                var allAlbumSongJoins = new List<AlbumSongs>();
+                var allMusicianSongJoins = new List<MusicianSongs>();
+
                 foreach (var song in songInfo)
                 {
-                    allSongs.Add(new Song { Id = currentSongId, Title = song.title, Length = ConvertToSeconds(song.length), Bands = new List<Band> { band }, Albums = new List<Album> { album }, Musicians = albumMusicians });
+                    allSongs.Add(new Song { Id = currentSongId, Title = song.title, Bands = new List<Bands> { band } });
+                    //Add additional per-album info about song in join table
+                    allAlbumSongJoins.Add(new AlbumSongs { Id = currentAlbumSongJoinId, SongId = currentSongId, Album = album, Length = ConvertToSeconds(song.length) });
+
+                    foreach (var musician in musiciansOnAlbum) {
+                        allMusicianSongJoins.Add(new MusicianSongs { Id = currentMusicianSongJoinId, MusicianId = musician.Id, SongId = currentSongId, Instruments = musician.Instruments });
+
+                        currentMusicianSongJoinId++;
+                    }
+
                     currentSongId++;
+                    currentAlbumSongJoinId++;
+
                 }
 
                 context.AddRange(allSongs);
+                context.AddRange(allMusicianSongJoins);
+                context.AddRange(allAlbumSongJoins);
                 context.SaveChanges();
             }
 
@@ -193,7 +217,7 @@ namespace DesignDemonstration
                     ("Daniels", "01:48")
                 };
 
-                AddSongList(context, NoKnife, drunkOnTheMoon, drunkOnTheMoonSongs);
+                AddSimpleSongList(context, NoKnife, drunkOnTheMoon, drunkOnTheMoonSongs);
 
                 var hitManDreams = NoKnife.Albums.First(a => a.Title == "Hit Man Dreams");
                 var hitManDreamsSongs = new (string title, string length)[]
@@ -211,7 +235,7 @@ namespace DesignDemonstration
                     ("Sweep Away My Shadow", "03:59"),
                 };
 
-                AddSongList(context, NoKnife, hitManDreams, hitManDreamsSongs);
+                AddSimpleSongList(context, NoKnife, hitManDreams, hitManDreamsSongs);
 
                 var fireInTheCity = NoKnife.Albums.First(a => a.Title == "Fire in the City of Automatons");
                 var fireInTheCitySongs = new (string title, string length)[]
@@ -230,7 +254,7 @@ namespace DesignDemonstration
                     ("If It Moves Kiss It", "04:51")
                 };
 
-                AddSongList(context, NoKnife, fireInTheCity, fireInTheCitySongs);
+                AddSimpleSongList(context, NoKnife, fireInTheCity, fireInTheCitySongs);
 
                 var riotForRomance = NoKnife.Albums.First(a => a.Title == "Riot for Romance");
                 var riotForRomanceSongs = new (string title, string length)[]
@@ -247,7 +271,7 @@ namespace DesignDemonstration
                     ("This Moonlife", "05:56")
                 };
 
-                AddSongList(context, NoKnife, riotForRomance, riotForRomanceSongs);
+                AddSimpleSongList(context, NoKnife, riotForRomance, riotForRomanceSongs);
 
             }
 
