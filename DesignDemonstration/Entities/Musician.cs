@@ -18,7 +18,7 @@ namespace DesignDemonstration.Entities
 
         //Many-to-Many Skip Navigation
         public ICollection<Album> Albums { get; set; } = new List<Album>();
-        public ICollection<Bands> Bands { get; set; } = new List<Bands>();
+        public ICollection<Band> Bands { get; set; } = new List<Band>();
         public ICollection<Song> Songs { get; set; } = new List<Song>();
     }
 }

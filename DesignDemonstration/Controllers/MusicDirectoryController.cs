@@ -3,6 +3,7 @@ using DesignDemonstration.DTOs;
 using DesignDemonstration.Entities;
 using DesignDemonstration.Interfaces;
 using DesignDemonstration.Services;
+using DesignDemonstration.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,17 +12,31 @@ namespace DesignDemonstration.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BandsController : ControllerBase
+    public class MusicDirectoryController : ControllerBase
     {
-        private readonly ILogger<BandsController> _logger;
+        private readonly ILogger<MusicDirectoryController> _logger;
         private readonly IBandsService _bandsService;
+        private readonly IFeaturedArtistsService _featuredArtistsService;
 
-        public BandsController(ILogger<BandsController> logger,
-                IBandsService bandsService
+        public MusicDirectoryController(ILogger<MusicDirectoryController> logger,
+                IBandsService bandsService,
+                IFeaturedArtistsService featuredArtistsService
             )
         {
             _logger = logger;
             _bandsService = bandsService;
+            _featuredArtistsService = featuredArtistsService;
+        }
+
+        [HttpGet("Home")]
+        public async Task<MusicDirectoryViewModel> GetDirectoryHome() 
+        {
+            var model = new MusicDirectoryViewModel();
+
+            model.FeaturedArtists = new List<FeaturedArtistDTO>() { await _featuredArtistsService.GetFeaturedArtist(1) };
+            model.Bands = await _bandsService.GetAllBands();
+
+            return model;
         }
 
         [HttpGet]

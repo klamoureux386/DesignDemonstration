@@ -4,12 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace DesignDemonstration.Entities
 {
     [Index(nameof(Name), IsUnique = true)]
-    public class Bands
+    public class Band
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Name { get; set; } = "";
         public string YearsActive { get; set; } = "";
+
+        //One-to-Many
+        public ICollection<FeaturedArtist> FeaturedArtists { get; set; } = new List<FeaturedArtist>();
 
         //Many-to-Many Join Tables
         public ICollection<AlbumBands> AlbumBands { get; set; } = new List<AlbumBands>();

@@ -7,9 +7,9 @@ using System;
 using NJsonSchema.CodeGeneration.TypeScript;
 using NSwag.CodeGeneration.CSharp;
 using DesignDemonstration.Interfaces;
-using DesignDemonstration.Services;
 using System.Text.Json.Serialization;
 using DesignDemonstration;
+using DesignDemonstration.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -89,4 +89,5 @@ void ConfigureServices(IServiceCollection services)
         });
 
     services.AddScoped<IBandsService, BandsService>();
+    services.AddScoped<IFeaturedArtistsService, FeaturedArtistsService>();
 }

@@ -9,7 +9,7 @@ namespace DesignDemonstration.Services
 
         public AutoMapper() 
         {
-            CreateMap<Bands, BandDTO>()
+            CreateMap<Band, BandDTO>()
                 .ForMember(m => m.AlbumIds, opt => opt.MapFrom(src => src.Albums.Select(e => e.Id)))
                 .ForMember(m => m.MusicianIds, opt => opt.MapFrom(src => src.Musicians.Select(e => e.Id)));
         }

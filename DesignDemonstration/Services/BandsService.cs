@@ -12,14 +12,14 @@ namespace DesignDemonstration.Services
         private readonly IMapper _mapper;
 
         public BandsService(DataContext context,
-            IMapper mapper) 
-        { 
+            IMapper mapper)
+        {
             _context = context;
             _mapper = mapper;
         }
 
-        public async Task<List<BandDTO>> GetAllBands() 
-        { 
+        public async Task<List<BandDTO>> GetAllBands()
+        {
             var bands = await _context.Bands
                 .Include(b => b.Albums)
                 .Include(b => b.Musicians)
@@ -30,7 +30,7 @@ namespace DesignDemonstration.Services
             return dtos;
         }
 
-        public async Task<BandDTO> GetBand(int id) 
+        public async Task<BandDTO> GetBand(int id)
         {
             var bands = await GetBands(new int[] { id });
 
@@ -39,8 +39,8 @@ namespace DesignDemonstration.Services
             return dto;
         }
 
-        public async Task<List<BandDTO>> GetBands(IEnumerable<int> ids) 
-        { 
+        public async Task<List<BandDTO>> GetBands(IEnumerable<int> ids)
+        {
             var bands = await _context.Bands.Where(b => ids.Contains(b.Id))
                 .Include(b => b.Albums)
                 .Include(b => b.Musicians)

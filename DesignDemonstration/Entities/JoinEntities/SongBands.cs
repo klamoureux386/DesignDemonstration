@@ -12,6 +12,6 @@ namespace DesignDemonstration.Entities
         public int BandId { get; set; }
 
         public Song Song { get; set; } = null!;
-        public Bands Band { get; set; } = null!;
+        public Band Band { get; set; } = null!;
     }
 }

@@ -13,7 +13,7 @@ namespace DesignDemonstration.Entities
         public string YearsActive { get; set; } = "";
         public string Instruments { get; set; } = "";
 
-        public Bands Band { get; set; } = null!;
+        public Band Band { get; set; } = null!;
         public Musician Musician { get; set; } = null!;
     }
 }

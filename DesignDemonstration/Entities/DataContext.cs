@@ -7,7 +7,8 @@ namespace DesignDemonstration.Entities
         public DbSet<Album> Albums { get; set; }
         public DbSet<AlbumSongs> AlbumSongs { get; set; }
         public DbSet<AlbumRating> AlbumRatings { get; set; }
-        public DbSet<Bands> Bands { get; set; }
+        public DbSet<Band> Bands { get; set; }
+        public DbSet<FeaturedArtist> FeaturedArtists { get; set; }
         public DbSet<Musician> Musicians { get; set; }
         public DbSet<MusicianSongs> MusicianSongs { get; set; }
         public DbSet<Song> Songs { get; set; }

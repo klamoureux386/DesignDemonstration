@@ -15,131 +15,6 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
-export interface IBandsClient {
-    getAll(): Observable<BandDTO[]>;
-    get(id: number): Observable<BandDTO>;
-}
-
-@Injectable()
-export class BandsClient implements IBandsClient {
-    private http: HttpClient;
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
-        this.http = http;
-        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
-    }
-
-    getAll(): Observable<BandDTO[]> {
-        let url_ = this.baseUrl + "/api/Bands";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAll(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetAll(response_ as any);
-                } catch (e) {
-                    return _observableThrow(e) as any as Observable<BandDTO[]>;
-                }
-            } else
-                return _observableThrow(response_) as any as Observable<BandDTO[]>;
-        }));
-    }
-
-    protected processGetAll(response: HttpResponseBase): Observable<BandDTO[]> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (response as any).error instanceof Blob ? (response as any).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        let _mappings: { source: any, target: any }[] = [];
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : jsonParse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(BandDTO.fromJS(item, _mappings));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf(null as any);
-    }
-
-    get(id: number): Observable<BandDTO> {
-        let url_ = this.baseUrl + "/api/Bands/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGet(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGet(response_ as any);
-                } catch (e) {
-                    return _observableThrow(e) as any as Observable<BandDTO>;
-                }
-            } else
-                return _observableThrow(response_) as any as Observable<BandDTO>;
-        }));
-    }
-
-    protected processGet(response: HttpResponseBase): Observable<BandDTO> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (response as any).error instanceof Blob ? (response as any).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        let _mappings: { source: any, target: any }[] = [];
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : jsonParse(_responseText, this.jsonParseReviver);
-            result200 = BandDTO.fromJS(resultData200, _mappings);
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf(null as any);
-    }
-}
-
 export interface IFeatherForecastClient {
     get(): Observable<WeatherForecast[]>;
 }
@@ -201,6 +76,181 @@ export class FeatherForecastClient implements IFeatherForecastClient {
             else {
                 result200 = <any>null;
             }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+export interface IMusicDirectoryClient {
+    getDirectoryHome(): Observable<MusicDirectoryViewModel>;
+    getAll(): Observable<BandDTO[]>;
+    get(id: number): Observable<BandDTO>;
+}
+
+@Injectable()
+export class MusicDirectoryClient implements IMusicDirectoryClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    getDirectoryHome(): Observable<MusicDirectoryViewModel> {
+        let url_ = this.baseUrl + "/api/MusicDirectory/Home";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDirectoryHome(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDirectoryHome(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<MusicDirectoryViewModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<MusicDirectoryViewModel>;
+        }));
+    }
+
+    protected processGetDirectoryHome(response: HttpResponseBase): Observable<MusicDirectoryViewModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        let _mappings: { source: any, target: any }[] = [];
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : jsonParse(_responseText, this.jsonParseReviver);
+            result200 = MusicDirectoryViewModel.fromJS(resultData200, _mappings);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getAll(): Observable<BandDTO[]> {
+        let url_ = this.baseUrl + "/api/MusicDirectory";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BandDTO[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BandDTO[]>;
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<BandDTO[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        let _mappings: { source: any, target: any }[] = [];
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : jsonParse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(BandDTO.fromJS(item, _mappings));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    get(id: number): Observable<BandDTO> {
+        let url_ = this.baseUrl + "/api/MusicDirectory/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BandDTO>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BandDTO>;
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<BandDTO> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        let _mappings: { source: any, target: any }[] = [];
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : jsonParse(_responseText, this.jsonParseReviver);
+            result200 = BandDTO.fromJS(resultData200, _mappings);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -284,6 +334,1244 @@ export class WeatherForecastClient implements IWeatherForecastClient {
     }
 }
 
+export class WeatherForecast implements IWeatherForecast {
+    date!: Date;
+    temperatureC!: number;
+    temperatureF!: number;
+    summary!: string | undefined;
+
+    constructor(data?: IWeatherForecast) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
+            this.temperatureC = _data["temperatureC"];
+            this.temperatureF = _data["temperatureF"];
+            this.summary = _data["summary"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): WeatherForecast | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<WeatherForecast>(data, _mappings, WeatherForecast);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["date"] = this.date ? formatDate(this.date) : <any>undefined;
+        data["temperatureC"] = this.temperatureC;
+        data["temperatureF"] = this.temperatureF;
+        data["summary"] = this.summary;
+        return data;
+    }
+}
+
+export interface IWeatherForecast {
+    date: Date;
+    temperatureC: number;
+    temperatureF: number;
+    summary: string | undefined;
+}
+
+export class MusicDirectoryViewModel implements IMusicDirectoryViewModel {
+    featuredArtists!: FeaturedArtistDTO[];
+    bands!: BandDTO[];
+
+    constructor(data?: IMusicDirectoryViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            if (Array.isArray(_data["featuredArtists"])) {
+                this.featuredArtists = [] as any;
+                for (let item of _data["featuredArtists"])
+                    this.featuredArtists!.push(FeaturedArtistDTO.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["bands"])) {
+                this.bands = [] as any;
+                for (let item of _data["bands"])
+                    this.bands!.push(BandDTO.fromJS(item, _mappings));
+            }
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): MusicDirectoryViewModel | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<MusicDirectoryViewModel>(data, _mappings, MusicDirectoryViewModel);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.featuredArtists)) {
+            data["featuredArtists"] = [];
+            for (let item of this.featuredArtists)
+                data["featuredArtists"].push(item.toJSON());
+        }
+        if (Array.isArray(this.bands)) {
+            data["bands"] = [];
+            for (let item of this.bands)
+                data["bands"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IMusicDirectoryViewModel {
+    featuredArtists: FeaturedArtistDTO[];
+    bands: BandDTO[];
+}
+
+export class FeaturedArtistDTO implements IFeaturedArtistDTO {
+    bandId!: number;
+    albumId!: number | undefined;
+    description!: string;
+    band!: Band;
+    album!: Album | undefined;
+
+    constructor(data?: IFeaturedArtistDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.bandId = _data["bandId"];
+            this.albumId = _data["albumId"];
+            this.description = _data["description"];
+            this.band = _data["band"] ? Band.fromJS(_data["band"], _mappings) : <any>undefined;
+            this.album = _data["album"] ? Album.fromJS(_data["album"], _mappings) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): FeaturedArtistDTO | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<FeaturedArtistDTO>(data, _mappings, FeaturedArtistDTO);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["bandId"] = this.bandId;
+        data["albumId"] = this.albumId;
+        data["description"] = this.description;
+        data["band"] = this.band ? this.band.toJSON() : <any>undefined;
+        data["album"] = this.album ? this.album.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IFeaturedArtistDTO {
+    bandId: number;
+    albumId: number | undefined;
+    description: string;
+    band: Band;
+    album: Album | undefined;
+}
+
+export class Band implements IBand {
+    id!: number;
+    name!: string;
+    yearsActive!: string;
+    featuredArtists!: FeaturedArtist[];
+    albumBands!: AlbumBands[];
+    bandMusicians!: MusicianBands[];
+    songBands!: SongBands[];
+    albums!: Album[];
+    musicians!: Musician[];
+    songs!: Song[];
+
+    constructor(data?: IBand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.yearsActive = _data["yearsActive"];
+            if (Array.isArray(_data["featuredArtists"])) {
+                this.featuredArtists = [] as any;
+                for (let item of _data["featuredArtists"])
+                    this.featuredArtists!.push(FeaturedArtist.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["albumBands"])) {
+                this.albumBands = [] as any;
+                for (let item of _data["albumBands"])
+                    this.albumBands!.push(AlbumBands.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["bandMusicians"])) {
+                this.bandMusicians = [] as any;
+                for (let item of _data["bandMusicians"])
+                    this.bandMusicians!.push(MusicianBands.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["songBands"])) {
+                this.songBands = [] as any;
+                for (let item of _data["songBands"])
+                    this.songBands!.push(SongBands.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["albums"])) {
+                this.albums = [] as any;
+                for (let item of _data["albums"])
+                    this.albums!.push(Album.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["musicians"])) {
+                this.musicians = [] as any;
+                for (let item of _data["musicians"])
+                    this.musicians!.push(Musician.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["songs"])) {
+                this.songs = [] as any;
+                for (let item of _data["songs"])
+                    this.songs!.push(Song.fromJS(item, _mappings));
+            }
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): Band | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<Band>(data, _mappings, Band);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["yearsActive"] = this.yearsActive;
+        if (Array.isArray(this.featuredArtists)) {
+            data["featuredArtists"] = [];
+            for (let item of this.featuredArtists)
+                data["featuredArtists"].push(item.toJSON());
+        }
+        if (Array.isArray(this.albumBands)) {
+            data["albumBands"] = [];
+            for (let item of this.albumBands)
+                data["albumBands"].push(item.toJSON());
+        }
+        if (Array.isArray(this.bandMusicians)) {
+            data["bandMusicians"] = [];
+            for (let item of this.bandMusicians)
+                data["bandMusicians"].push(item.toJSON());
+        }
+        if (Array.isArray(this.songBands)) {
+            data["songBands"] = [];
+            for (let item of this.songBands)
+                data["songBands"].push(item.toJSON());
+        }
+        if (Array.isArray(this.albums)) {
+            data["albums"] = [];
+            for (let item of this.albums)
+                data["albums"].push(item.toJSON());
+        }
+        if (Array.isArray(this.musicians)) {
+            data["musicians"] = [];
+            for (let item of this.musicians)
+                data["musicians"].push(item.toJSON());
+        }
+        if (Array.isArray(this.songs)) {
+            data["songs"] = [];
+            for (let item of this.songs)
+                data["songs"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IBand {
+    id: number;
+    name: string;
+    yearsActive: string;
+    featuredArtists: FeaturedArtist[];
+    albumBands: AlbumBands[];
+    bandMusicians: MusicianBands[];
+    songBands: SongBands[];
+    albums: Album[];
+    musicians: Musician[];
+    songs: Song[];
+}
+
+export class FeaturedArtist implements IFeaturedArtist {
+    id!: number;
+    bandId!: number;
+    albumId!: number | undefined;
+    description!: string;
+    startDate!: Date;
+    endDate!: Date | undefined;
+    album!: Album | undefined;
+    band!: Band;
+
+    constructor(data?: IFeaturedArtist) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.bandId = _data["bandId"];
+            this.albumId = _data["albumId"];
+            this.description = _data["description"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            this.album = _data["album"] ? Album.fromJS(_data["album"], _mappings) : <any>undefined;
+            this.band = _data["band"] ? Band.fromJS(_data["band"], _mappings) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): FeaturedArtist | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<FeaturedArtist>(data, _mappings, FeaturedArtist);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["bandId"] = this.bandId;
+        data["albumId"] = this.albumId;
+        data["description"] = this.description;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        data["album"] = this.album ? this.album.toJSON() : <any>undefined;
+        data["band"] = this.band ? this.band.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IFeaturedArtist {
+    id: number;
+    bandId: number;
+    albumId: number | undefined;
+    description: string;
+    startDate: Date;
+    endDate: Date | undefined;
+    album: Album | undefined;
+    band: Band;
+}
+
+export class Album implements IAlbum {
+    id!: number;
+    title!: string;
+    ratings!: AlbumRating[];
+    songRatings!: SongRating[];
+    albumBands!: AlbumBands[];
+    albumMusicians!: AlbumMusicians[];
+    albumSongs!: AlbumSongs[];
+    bands!: Band[];
+    musicians!: Musician[];
+    songs!: Song[];
+
+    constructor(data?: IAlbum) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            if (Array.isArray(_data["ratings"])) {
+                this.ratings = [] as any;
+                for (let item of _data["ratings"])
+                    this.ratings!.push(AlbumRating.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["songRatings"])) {
+                this.songRatings = [] as any;
+                for (let item of _data["songRatings"])
+                    this.songRatings!.push(SongRating.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["albumBands"])) {
+                this.albumBands = [] as any;
+                for (let item of _data["albumBands"])
+                    this.albumBands!.push(AlbumBands.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["albumMusicians"])) {
+                this.albumMusicians = [] as any;
+                for (let item of _data["albumMusicians"])
+                    this.albumMusicians!.push(AlbumMusicians.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["albumSongs"])) {
+                this.albumSongs = [] as any;
+                for (let item of _data["albumSongs"])
+                    this.albumSongs!.push(AlbumSongs.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["bands"])) {
+                this.bands = [] as any;
+                for (let item of _data["bands"])
+                    this.bands!.push(Band.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["musicians"])) {
+                this.musicians = [] as any;
+                for (let item of _data["musicians"])
+                    this.musicians!.push(Musician.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["songs"])) {
+                this.songs = [] as any;
+                for (let item of _data["songs"])
+                    this.songs!.push(Song.fromJS(item, _mappings));
+            }
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): Album | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<Album>(data, _mappings, Album);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        if (Array.isArray(this.ratings)) {
+            data["ratings"] = [];
+            for (let item of this.ratings)
+                data["ratings"].push(item.toJSON());
+        }
+        if (Array.isArray(this.songRatings)) {
+            data["songRatings"] = [];
+            for (let item of this.songRatings)
+                data["songRatings"].push(item.toJSON());
+        }
+        if (Array.isArray(this.albumBands)) {
+            data["albumBands"] = [];
+            for (let item of this.albumBands)
+                data["albumBands"].push(item.toJSON());
+        }
+        if (Array.isArray(this.albumMusicians)) {
+            data["albumMusicians"] = [];
+            for (let item of this.albumMusicians)
+                data["albumMusicians"].push(item.toJSON());
+        }
+        if (Array.isArray(this.albumSongs)) {
+            data["albumSongs"] = [];
+            for (let item of this.albumSongs)
+                data["albumSongs"].push(item.toJSON());
+        }
+        if (Array.isArray(this.bands)) {
+            data["bands"] = [];
+            for (let item of this.bands)
+                data["bands"].push(item.toJSON());
+        }
+        if (Array.isArray(this.musicians)) {
+            data["musicians"] = [];
+            for (let item of this.musicians)
+                data["musicians"].push(item.toJSON());
+        }
+        if (Array.isArray(this.songs)) {
+            data["songs"] = [];
+            for (let item of this.songs)
+                data["songs"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IAlbum {
+    id: number;
+    title: string;
+    ratings: AlbumRating[];
+    songRatings: SongRating[];
+    albumBands: AlbumBands[];
+    albumMusicians: AlbumMusicians[];
+    albumSongs: AlbumSongs[];
+    bands: Band[];
+    musicians: Musician[];
+    songs: Song[];
+}
+
+export class AlbumRating implements IAlbumRating {
+    id!: number;
+    albumId!: number;
+    userId!: number;
+    rating!: number;
+    review!: string | undefined;
+    tagline!: string | undefined;
+    album!: Album;
+    user!: User;
+
+    constructor(data?: IAlbumRating) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.albumId = _data["albumId"];
+            this.userId = _data["userId"];
+            this.rating = _data["rating"];
+            this.review = _data["review"];
+            this.tagline = _data["tagline"];
+            this.album = _data["album"] ? Album.fromJS(_data["album"], _mappings) : <any>undefined;
+            this.user = _data["user"] ? User.fromJS(_data["user"], _mappings) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): AlbumRating | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<AlbumRating>(data, _mappings, AlbumRating);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["albumId"] = this.albumId;
+        data["userId"] = this.userId;
+        data["rating"] = this.rating;
+        data["review"] = this.review;
+        data["tagline"] = this.tagline;
+        data["album"] = this.album ? this.album.toJSON() : <any>undefined;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IAlbumRating {
+    id: number;
+    albumId: number;
+    userId: number;
+    rating: number;
+    review: string | undefined;
+    tagline: string | undefined;
+    album: Album;
+    user: User;
+}
+
+export class User implements IUser {
+    id!: number;
+    username!: string;
+    email!: string;
+    type!: string;
+    displayName!: string | undefined;
+    songRatings!: SongRating[];
+    albumsRatings!: AlbumRating[];
+
+    constructor(data?: IUser) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.username = _data["username"];
+            this.email = _data["email"];
+            this.type = _data["type"];
+            this.displayName = _data["displayName"];
+            if (Array.isArray(_data["songRatings"])) {
+                this.songRatings = [] as any;
+                for (let item of _data["songRatings"])
+                    this.songRatings!.push(SongRating.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["albumsRatings"])) {
+                this.albumsRatings = [] as any;
+                for (let item of _data["albumsRatings"])
+                    this.albumsRatings!.push(AlbumRating.fromJS(item, _mappings));
+            }
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): User | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<User>(data, _mappings, User);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["username"] = this.username;
+        data["email"] = this.email;
+        data["type"] = this.type;
+        data["displayName"] = this.displayName;
+        if (Array.isArray(this.songRatings)) {
+            data["songRatings"] = [];
+            for (let item of this.songRatings)
+                data["songRatings"].push(item.toJSON());
+        }
+        if (Array.isArray(this.albumsRatings)) {
+            data["albumsRatings"] = [];
+            for (let item of this.albumsRatings)
+                data["albumsRatings"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IUser {
+    id: number;
+    username: string;
+    email: string;
+    type: string;
+    displayName: string | undefined;
+    songRatings: SongRating[];
+    albumsRatings: AlbumRating[];
+}
+
+export class SongRating implements ISongRating {
+    album!: Album;
+    song!: Song;
+    user!: User;
+    id!: number;
+    songId!: number;
+    albumId!: number;
+    userId!: number;
+    rating!: number;
+    review!: string | undefined;
+
+    constructor(data?: ISongRating) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.album = _data["album"] ? Album.fromJS(_data["album"], _mappings) : <any>undefined;
+            this.song = _data["song"] ? Song.fromJS(_data["song"], _mappings) : <any>undefined;
+            this.user = _data["user"] ? User.fromJS(_data["user"], _mappings) : <any>undefined;
+            this.id = _data["id"];
+            this.songId = _data["songId"];
+            this.albumId = _data["albumId"];
+            this.userId = _data["userId"];
+            this.rating = _data["rating"];
+            this.review = _data["review"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): SongRating | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<SongRating>(data, _mappings, SongRating);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["album"] = this.album ? this.album.toJSON() : <any>undefined;
+        data["song"] = this.song ? this.song.toJSON() : <any>undefined;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        data["id"] = this.id;
+        data["songId"] = this.songId;
+        data["albumId"] = this.albumId;
+        data["userId"] = this.userId;
+        data["rating"] = this.rating;
+        data["review"] = this.review;
+        return data;
+    }
+}
+
+export interface ISongRating {
+    album: Album;
+    song: Song;
+    user: User;
+    id: number;
+    songId: number;
+    albumId: number;
+    userId: number;
+    rating: number;
+    review: string | undefined;
+}
+
+export class Song implements ISong {
+    id!: number;
+    title!: string;
+    ratings!: SongRating[];
+    albumSongs!: AlbumSongs[];
+    songBands!: SongBands[];
+    musicianSongs!: MusicianSongs[];
+    albums!: Album[];
+    bands!: Band[];
+    musicians!: Musician[];
+
+    constructor(data?: ISong) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            if (Array.isArray(_data["ratings"])) {
+                this.ratings = [] as any;
+                for (let item of _data["ratings"])
+                    this.ratings!.push(SongRating.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["albumSongs"])) {
+                this.albumSongs = [] as any;
+                for (let item of _data["albumSongs"])
+                    this.albumSongs!.push(AlbumSongs.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["songBands"])) {
+                this.songBands = [] as any;
+                for (let item of _data["songBands"])
+                    this.songBands!.push(SongBands.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["musicianSongs"])) {
+                this.musicianSongs = [] as any;
+                for (let item of _data["musicianSongs"])
+                    this.musicianSongs!.push(MusicianSongs.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["albums"])) {
+                this.albums = [] as any;
+                for (let item of _data["albums"])
+                    this.albums!.push(Album.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["bands"])) {
+                this.bands = [] as any;
+                for (let item of _data["bands"])
+                    this.bands!.push(Band.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["musicians"])) {
+                this.musicians = [] as any;
+                for (let item of _data["musicians"])
+                    this.musicians!.push(Musician.fromJS(item, _mappings));
+            }
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): Song | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<Song>(data, _mappings, Song);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        if (Array.isArray(this.ratings)) {
+            data["ratings"] = [];
+            for (let item of this.ratings)
+                data["ratings"].push(item.toJSON());
+        }
+        if (Array.isArray(this.albumSongs)) {
+            data["albumSongs"] = [];
+            for (let item of this.albumSongs)
+                data["albumSongs"].push(item.toJSON());
+        }
+        if (Array.isArray(this.songBands)) {
+            data["songBands"] = [];
+            for (let item of this.songBands)
+                data["songBands"].push(item.toJSON());
+        }
+        if (Array.isArray(this.musicianSongs)) {
+            data["musicianSongs"] = [];
+            for (let item of this.musicianSongs)
+                data["musicianSongs"].push(item.toJSON());
+        }
+        if (Array.isArray(this.albums)) {
+            data["albums"] = [];
+            for (let item of this.albums)
+                data["albums"].push(item.toJSON());
+        }
+        if (Array.isArray(this.bands)) {
+            data["bands"] = [];
+            for (let item of this.bands)
+                data["bands"].push(item.toJSON());
+        }
+        if (Array.isArray(this.musicians)) {
+            data["musicians"] = [];
+            for (let item of this.musicians)
+                data["musicians"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface ISong {
+    id: number;
+    title: string;
+    ratings: SongRating[];
+    albumSongs: AlbumSongs[];
+    songBands: SongBands[];
+    musicianSongs: MusicianSongs[];
+    albums: Album[];
+    bands: Band[];
+    musicians: Musician[];
+}
+
+export class AlbumSongs implements IAlbumSongs {
+    id!: number;
+    albumId!: number;
+    songId!: number;
+    length!: number;
+    album!: Album;
+    song!: Song;
+
+    constructor(data?: IAlbumSongs) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.albumId = _data["albumId"];
+            this.songId = _data["songId"];
+            this.length = _data["length"];
+            this.album = _data["album"] ? Album.fromJS(_data["album"], _mappings) : <any>undefined;
+            this.song = _data["song"] ? Song.fromJS(_data["song"], _mappings) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): AlbumSongs | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<AlbumSongs>(data, _mappings, AlbumSongs);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["albumId"] = this.albumId;
+        data["songId"] = this.songId;
+        data["length"] = this.length;
+        data["album"] = this.album ? this.album.toJSON() : <any>undefined;
+        data["song"] = this.song ? this.song.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IAlbumSongs {
+    id: number;
+    albumId: number;
+    songId: number;
+    length: number;
+    album: Album;
+    song: Song;
+}
+
+export class SongBands implements ISongBands {
+    id!: number;
+    songId!: number;
+    bandId!: number;
+    song!: Song;
+    band!: Band;
+
+    constructor(data?: ISongBands) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.songId = _data["songId"];
+            this.bandId = _data["bandId"];
+            this.song = _data["song"] ? Song.fromJS(_data["song"], _mappings) : <any>undefined;
+            this.band = _data["band"] ? Band.fromJS(_data["band"], _mappings) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): SongBands | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<SongBands>(data, _mappings, SongBands);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["songId"] = this.songId;
+        data["bandId"] = this.bandId;
+        data["song"] = this.song ? this.song.toJSON() : <any>undefined;
+        data["band"] = this.band ? this.band.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface ISongBands {
+    id: number;
+    songId: number;
+    bandId: number;
+    song: Song;
+    band: Band;
+}
+
+export class MusicianSongs implements IMusicianSongs {
+    id!: number;
+    songId!: number;
+    musicianId!: number;
+    instruments!: string;
+    isFeatured!: boolean;
+    song!: Song;
+    musician!: Musician;
+
+    constructor(data?: IMusicianSongs) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.songId = _data["songId"];
+            this.musicianId = _data["musicianId"];
+            this.instruments = _data["instruments"];
+            this.isFeatured = _data["isFeatured"];
+            this.song = _data["song"] ? Song.fromJS(_data["song"], _mappings) : <any>undefined;
+            this.musician = _data["musician"] ? Musician.fromJS(_data["musician"], _mappings) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): MusicianSongs | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<MusicianSongs>(data, _mappings, MusicianSongs);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["songId"] = this.songId;
+        data["musicianId"] = this.musicianId;
+        data["instruments"] = this.instruments;
+        data["isFeatured"] = this.isFeatured;
+        data["song"] = this.song ? this.song.toJSON() : <any>undefined;
+        data["musician"] = this.musician ? this.musician.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IMusicianSongs {
+    id: number;
+    songId: number;
+    musicianId: number;
+    instruments: string;
+    isFeatured: boolean;
+    song: Song;
+    musician: Musician;
+}
+
+export class Musician implements IMusician {
+    id!: number;
+    firstName!: string;
+    middleName!: string | undefined;
+    lastName!: string;
+    instruments!: string;
+    albumMusicians!: AlbumMusicians[];
+    bandMusicians!: MusicianBands[];
+    musicanSongs!: MusicianSongs[];
+    albums!: Album[];
+    bands!: Band[];
+    songs!: Song[];
+
+    constructor(data?: IMusician) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.instruments = _data["instruments"];
+            if (Array.isArray(_data["albumMusicians"])) {
+                this.albumMusicians = [] as any;
+                for (let item of _data["albumMusicians"])
+                    this.albumMusicians!.push(AlbumMusicians.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["bandMusicians"])) {
+                this.bandMusicians = [] as any;
+                for (let item of _data["bandMusicians"])
+                    this.bandMusicians!.push(MusicianBands.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["musicanSongs"])) {
+                this.musicanSongs = [] as any;
+                for (let item of _data["musicanSongs"])
+                    this.musicanSongs!.push(MusicianSongs.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["albums"])) {
+                this.albums = [] as any;
+                for (let item of _data["albums"])
+                    this.albums!.push(Album.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["bands"])) {
+                this.bands = [] as any;
+                for (let item of _data["bands"])
+                    this.bands!.push(Band.fromJS(item, _mappings));
+            }
+            if (Array.isArray(_data["songs"])) {
+                this.songs = [] as any;
+                for (let item of _data["songs"])
+                    this.songs!.push(Song.fromJS(item, _mappings));
+            }
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): Musician | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<Musician>(data, _mappings, Musician);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["instruments"] = this.instruments;
+        if (Array.isArray(this.albumMusicians)) {
+            data["albumMusicians"] = [];
+            for (let item of this.albumMusicians)
+                data["albumMusicians"].push(item.toJSON());
+        }
+        if (Array.isArray(this.bandMusicians)) {
+            data["bandMusicians"] = [];
+            for (let item of this.bandMusicians)
+                data["bandMusicians"].push(item.toJSON());
+        }
+        if (Array.isArray(this.musicanSongs)) {
+            data["musicanSongs"] = [];
+            for (let item of this.musicanSongs)
+                data["musicanSongs"].push(item.toJSON());
+        }
+        if (Array.isArray(this.albums)) {
+            data["albums"] = [];
+            for (let item of this.albums)
+                data["albums"].push(item.toJSON());
+        }
+        if (Array.isArray(this.bands)) {
+            data["bands"] = [];
+            for (let item of this.bands)
+                data["bands"].push(item.toJSON());
+        }
+        if (Array.isArray(this.songs)) {
+            data["songs"] = [];
+            for (let item of this.songs)
+                data["songs"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IMusician {
+    id: number;
+    firstName: string;
+    middleName: string | undefined;
+    lastName: string;
+    instruments: string;
+    albumMusicians: AlbumMusicians[];
+    bandMusicians: MusicianBands[];
+    musicanSongs: MusicianSongs[];
+    albums: Album[];
+    bands: Band[];
+    songs: Song[];
+}
+
+export class AlbumMusicians implements IAlbumMusicians {
+    id!: number;
+    albumId!: number;
+    musicianId!: number;
+    album!: Album;
+    musician!: Musician;
+
+    constructor(data?: IAlbumMusicians) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.albumId = _data["albumId"];
+            this.musicianId = _data["musicianId"];
+            this.album = _data["album"] ? Album.fromJS(_data["album"], _mappings) : <any>undefined;
+            this.musician = _data["musician"] ? Musician.fromJS(_data["musician"], _mappings) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): AlbumMusicians | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<AlbumMusicians>(data, _mappings, AlbumMusicians);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["albumId"] = this.albumId;
+        data["musicianId"] = this.musicianId;
+        data["album"] = this.album ? this.album.toJSON() : <any>undefined;
+        data["musician"] = this.musician ? this.musician.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IAlbumMusicians {
+    id: number;
+    albumId: number;
+    musicianId: number;
+    album: Album;
+    musician: Musician;
+}
+
+export class MusicianBands implements IMusicianBands {
+    id!: number;
+    bandId!: number;
+    musicianId!: number;
+    yearsActive!: string;
+    instruments!: string;
+    band!: Band;
+    musician!: Musician;
+
+    constructor(data?: IMusicianBands) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.bandId = _data["bandId"];
+            this.musicianId = _data["musicianId"];
+            this.yearsActive = _data["yearsActive"];
+            this.instruments = _data["instruments"];
+            this.band = _data["band"] ? Band.fromJS(_data["band"], _mappings) : <any>undefined;
+            this.musician = _data["musician"] ? Musician.fromJS(_data["musician"], _mappings) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): MusicianBands | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<MusicianBands>(data, _mappings, MusicianBands);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["bandId"] = this.bandId;
+        data["musicianId"] = this.musicianId;
+        data["yearsActive"] = this.yearsActive;
+        data["instruments"] = this.instruments;
+        data["band"] = this.band ? this.band.toJSON() : <any>undefined;
+        data["musician"] = this.musician ? this.musician.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IMusicianBands {
+    id: number;
+    bandId: number;
+    musicianId: number;
+    yearsActive: string;
+    instruments: string;
+    band: Band;
+    musician: Musician;
+}
+
+export class AlbumBands implements IAlbumBands {
+    id!: number;
+    albumId!: number;
+    bandId!: number;
+    album!: Album;
+    band!: Band;
+
+    constructor(data?: IAlbumBands) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.albumId = _data["albumId"];
+            this.bandId = _data["bandId"];
+            this.album = _data["album"] ? Album.fromJS(_data["album"], _mappings) : <any>undefined;
+            this.band = _data["band"] ? Band.fromJS(_data["band"], _mappings) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): AlbumBands | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<AlbumBands>(data, _mappings, AlbumBands);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["albumId"] = this.albumId;
+        data["bandId"] = this.bandId;
+        data["album"] = this.album ? this.album.toJSON() : <any>undefined;
+        data["band"] = this.band ? this.band.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IAlbumBands {
+    id: number;
+    albumId: number;
+    bandId: number;
+    album: Album;
+    band: Band;
+}
+
 export class BandDTO implements IBandDTO {
     id!: number;
     name!: string;
@@ -344,52 +1632,6 @@ export interface IBandDTO {
     name: string;
     albumIds: number[];
     musicianIds: number[];
-}
-
-export class WeatherForecast implements IWeatherForecast {
-    date!: Date;
-    temperatureC!: number;
-    temperatureF!: number;
-    summary!: string | undefined;
-
-    constructor(data?: IWeatherForecast) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any, _mappings?: any) {
-        if (_data) {
-            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
-            this.temperatureC = _data["temperatureC"];
-            this.temperatureF = _data["temperatureF"];
-            this.summary = _data["summary"];
-        }
-    }
-
-    static fromJS(data: any, _mappings?: any): WeatherForecast | null {
-        data = typeof data === 'object' ? data : {};
-        return createInstance<WeatherForecast>(data, _mappings, WeatherForecast);
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["date"] = this.date ? formatDate(this.date) : <any>undefined;
-        data["temperatureC"] = this.temperatureC;
-        data["temperatureF"] = this.temperatureF;
-        data["summary"] = this.summary;
-        return data;
-    }
-}
-
-export interface IWeatherForecast {
-    date: Date;
-    temperatureC: number;
-    temperatureF: number;
-    summary: string | undefined;
 }
 
 function formatDate(d: Date) {
