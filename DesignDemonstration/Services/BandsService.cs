@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using DesignDemonstration.DTOs;
+﻿using DesignDemonstration.DTOs;
 using DesignDemonstration.Entities;
 using DesignDemonstration.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -9,13 +8,10 @@ namespace DesignDemonstration.Services
     public class BandsService : IBandsService
     {
         private DataContext _context;
-        private readonly IMapper _mapper;
 
-        public BandsService(DataContext context,
-            IMapper mapper)
+        public BandsService(DataContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<List<BandDTO>> GetAllBands()
@@ -25,7 +21,7 @@ namespace DesignDemonstration.Services
                 .Include(b => b.Musicians)
                 .ToListAsync();
 
-            var dtos = _mapper.Map<List<BandDTO>>(bands);
+            var dtos = bands.Select(b => new BandDTO(b)).ToList();
 
             return dtos;
         }
@@ -34,7 +30,7 @@ namespace DesignDemonstration.Services
         {
             var bands = await GetBands(new int[] { id });
 
-            var dto = _mapper.Map<BandDTO>(bands.First());
+            var dto = bands.First();
 
             return dto;
         }
@@ -46,7 +42,7 @@ namespace DesignDemonstration.Services
                 .Include(b => b.Musicians)
                 .ToListAsync();
 
-            var dtos = _mapper.Map<List<BandDTO>>(bands);
+            var dtos = bands.Select(b => new BandDTO(b)).ToList();
 
             return dtos;
         }

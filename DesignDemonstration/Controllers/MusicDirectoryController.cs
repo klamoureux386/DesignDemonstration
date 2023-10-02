@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using DesignDemonstration.DTOs;
+﻿using DesignDemonstration.DTOs;
 using DesignDemonstration.Entities;
 using DesignDemonstration.Interfaces;
 using DesignDemonstration.Services;
@@ -33,7 +32,7 @@ namespace DesignDemonstration.Controllers
         {
             var model = new MusicDirectoryViewModel();
 
-            model.FeaturedArtists = new List<FeaturedArtistDTO>() { await _featuredArtistsService.GetFeaturedArtist(1) };
+            model.FeaturedArtists = new List<FeaturedArtistDTO>() {  await _featuredArtistsService.GetFeaturedArtist(1) };
             model.Bands = await _bandsService.GetAllBands();
 
             return model;

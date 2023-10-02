@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using DesignDemonstration.DTOs;
+﻿using DesignDemonstration.DTOs;
 using DesignDemonstration.Entities;
 using DesignDemonstration.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +8,8 @@ namespace DesignDemonstration.Services
     public class FeaturedArtistsService : IFeaturedArtistsService
     {
         private DataContext _context;
-        private readonly IMapper _mapper;
 
-        public FeaturedArtistsService(DataContext context,
-            IMapper mapper)
+        public FeaturedArtistsService(DataContext context)
         {
             _context = context;
             _mapper = mapper;
@@ -22,7 +19,7 @@ namespace DesignDemonstration.Services
         {
             var artist = await _context.FeaturedArtists.FindAsync(id);
 
-            var dto = _mapper.Map<FeaturedArtistDTO>(artist);
+            var dto = new FeaturedArtistDTO(artist);
 
             return dto;
         }

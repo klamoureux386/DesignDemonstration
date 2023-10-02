@@ -435,6 +435,7 @@ export interface IMusicDirectoryViewModel {
 
 export class FeaturedArtistDTO implements IFeaturedArtistDTO {
     bandId!: number;
+    bandName!: string;
     albumId!: number | undefined;
     description!: string;
 
@@ -450,6 +451,7 @@ export class FeaturedArtistDTO implements IFeaturedArtistDTO {
     init(_data?: any) {
         if (_data) {
             this.bandId = _data["bandId"];
+            this.bandName = _data["bandName"];
             this.albumId = _data["albumId"];
             this.description = _data["description"];
         }
@@ -465,6 +467,7 @@ export class FeaturedArtistDTO implements IFeaturedArtistDTO {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["bandId"] = this.bandId;
+        data["bandName"] = this.bandName;
         data["albumId"] = this.albumId;
         data["description"] = this.description;
         return data;
@@ -473,6 +476,7 @@ export class FeaturedArtistDTO implements IFeaturedArtistDTO {
 
 export interface IFeaturedArtistDTO {
     bandId: number;
+    bandName: string;
     albumId: number | undefined;
     description: string;
 }

@@ -178,10 +178,7 @@
       "extensionCode": "",
       "generateDefaultValues": true,
       "excludedTypeNames": [],
-      "excludedParameterNames": []
-      //Setting to false to enable usage of DTOs in ViewModels, else you end up with:
-      // error TS2345: Argument of type 'X | null' is not assignable to parameter of type 'X'.
-      // Type 'null' is not assignable to type 'X'
+      "excludedParameterNames": [],
       "handleReferences": false,
       "generateConstructorInterface": true,
       "convertConstructorInterfaceData": false,
@@ -201,3 +198,7 @@
     }
   }
 }
+
+//Setting openApiToTypeScriptClient handleReferences to false to enable usage of DTOs in ViewModels, else you end up with:
+      // error TS2345: Argument of type 'X | null' is not assignable to parameter of type 'X'.
+      // Type 'null' is not assignable to type 'X'
