@@ -7,7 +7,7 @@ namespace DesignDemonstration.DTOs
         public int BandId { get; set; }
         public int? AlbumId { get; set; }
         public string Description { get; set; } = "";
-        public Band Band { get; set; }
-        public Album? Album { get; set; }
+        //public BandDTO Band { get; set; }
+        //public AlbumDTO? Album { get; set; }
     }
 }

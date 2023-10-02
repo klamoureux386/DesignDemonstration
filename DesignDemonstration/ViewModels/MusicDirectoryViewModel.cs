@@ -5,7 +5,13 @@ namespace DesignDemonstration.ViewModels
 {
     public class MusicDirectoryViewModel
     {
-        public List<FeaturedArtistDTO> FeaturedArtists { get; set; } = new List<FeaturedArtistDTO>();
-        public List<BandDTO> Bands { get; set; } = new List<BandDTO>();
+        public MusicDirectoryViewModel() 
+        { 
+            FeaturedArtists = new List<FeaturedArtistDTO>();
+            Bands = new List<BandDTO>();
+        }
+
+        public List<FeaturedArtistDTO> FeaturedArtists { get; set; }
+        public List<BandDTO> Bands { get; set; }
     }
 }

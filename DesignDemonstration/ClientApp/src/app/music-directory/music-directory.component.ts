@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BandDTO, BandsClient } from '../../api.generated.clients';
+import { BandDTO, MusicDirectoryClient, MusicDirectoryViewModel } from '../../api.generated.clients';
 import { ToastrService } from 'ngx-toastr';
 import { FeaturedArtistInfo } from './featured-artists/featured-artists.component';
 
@@ -7,9 +7,11 @@ import { FeaturedArtistInfo } from './featured-artists/featured-artists.componen
   selector: 'app-music-directory',
   templateUrl: './music-directory.component.html',
   styleUrls: ['./music-directory.component.css'],
-  providers: [BandsClient]
+  providers: [MusicDirectoryClient]
 })
 export class MusicDirectoryComponent implements OnInit {
+
+  public model : MusicDirectoryViewModel = new MusicDirectoryViewModel();
 
   public bands: BandDTO[] = [];
 
@@ -21,29 +23,39 @@ export class MusicDirectoryComponent implements OnInit {
   ];
 
   constructor(
-    public bandsClient: BandsClient,
+    public directoryClient: MusicDirectoryClient,
     private toastr: ToastrService
     ) {
    }
 
   ngOnInit(): void {
     //https://rxjs.dev/deprecations/subscribe-arguments
-    this.bandsClient.getAll().subscribe({
+    this.directoryClient.getAll().subscribe({
       next: (res) => this.bands = res,
       error: (err) => this.toastr.error(err.message),
     });
 
-    this.featuredArtistsInfo = this.getFeaturedArtists();
+    this.directoryClient.getDirectoryHome().subscribe({
+      next: (res) => this.model = res,
+      error: (err) => this.toastr.error(err.message),
+      complete: () => this.setFeaturedArtists()
+    })
 
   }
 
-  getFeaturedArtists(): FeaturedArtistInfo[] {
+  setFeaturedArtists() {
 
     let infos: FeaturedArtistInfo[] = []
 
-    infos.push(new FeaturedArtistInfo("Shiner", "../../assets/shiner-egg.jpg", "Shiner Description"));
-    infos.push(new FeaturedArtistInfo("No Knife", "../../assets/no-knife-fire.jpg", "No Knife Description"));
-    infos.push(new FeaturedArtistInfo("Rival Schools", "../../assets/rival-schools-united.jpg", "Rival Schools Description"));
+    for(const artist of this.model.featuredArtists) {
+      infos.push(new FeaturedArtistInfo("a", "../../assets/shiner-egg.jpg", artist.description))
+    }
+
+    // infos.push(new FeaturedArtistInfo("Shiner", "../../assets/shiner-egg.jpg", "Shiner Description"));
+    // infos.push(new FeaturedArtistInfo("No Knife", "../../assets/no-knife-fire.jpg", "No Knife Description"));
+    // infos.push(new FeaturedArtistInfo("Rival Schools", "../../assets/rival-schools-united.jpg", "Rival Schools Description"));
+
+    this.featuredArtistsInfo = infos;
 
     return infos;
 
