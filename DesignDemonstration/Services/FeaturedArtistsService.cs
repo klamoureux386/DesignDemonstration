@@ -12,12 +12,11 @@ namespace DesignDemonstration.Services
         public FeaturedArtistsService(DataContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<FeaturedArtistDTO> GetFeaturedArtist(int id) 
         {
-            var artist = await _context.FeaturedArtists.FindAsync(id);
+            var artist = await _context.FeaturedArtists.Include(e => e.Band).FirstAsync(e => e.Id == id);
 
             var dto = new FeaturedArtistDTO(artist);
 

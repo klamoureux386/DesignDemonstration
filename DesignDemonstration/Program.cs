@@ -77,10 +77,6 @@ void ConfigureServices(IServiceCollection services)
     builder.Services.AddDbContext<DataContext>(options =>
       options.UseSqlite(builder.Configuration.GetConnectionString($"Data Source={DbPath}")));
 
-    //https://www.c-sharpcorner.com/article/automapper-in-asp-net-core-7-web-api/
-    // Register AutoMapper.
-    services.AddAutoMapper(typeof(Program));
-
     //Ignore loops on many-to-many
     services.AddControllers()
         .AddJsonOptions(options =>

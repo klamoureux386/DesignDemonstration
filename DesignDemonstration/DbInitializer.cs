@@ -23,7 +23,7 @@ namespace DesignDemonstration
 
             AddSongs(context);
 
-            //AddFeaturedArtists(context);
+            AddFeaturedArtists(context);
 
 
             void AddUsers(DataContext context) 
