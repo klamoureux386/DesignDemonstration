@@ -8,6 +8,7 @@
         public string Description { get; set; } = "";
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public string? ImgSrc { get; set; } //If null, default to Album img src if available, otherwise use Band img src
 
         public Album? Album { get; set; }
         public Band Band { get; set; }

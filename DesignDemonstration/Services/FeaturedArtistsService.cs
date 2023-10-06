@@ -22,5 +22,14 @@ namespace DesignDemonstration.Services
 
             return dto;
         }
+
+        public async Task<List<FeaturedArtistDTO>> GetFeaturedArtists()
+        {
+            var artists = await _context.FeaturedArtists.Include(e => e.Band).ToListAsync();
+
+            var dtos = artists.Select(a =>  new FeaturedArtistDTO(a)).ToList();
+
+            return dtos;
+        }
     }
 }

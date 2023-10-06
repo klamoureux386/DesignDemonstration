@@ -16,6 +16,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { BandPageComponent } from './band-page/band-page.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FeaturedArtistsComponent } from './music-directory/featured-artists/featured-artists.component';
+import { EditFeaturedArtistsComponent } from './music-directory/featured-artists/edit-featured-artists/edit-featured-artists.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { FeaturedArtistsComponent } from './music-directory/featured-artists/fea
     PageNotFoundComponent,
     BandPageComponent,
     FeaturedArtistsComponent,
+    EditFeaturedArtistsComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,7 +42,7 @@ import { FeaturedArtistsComponent } from './music-directory/featured-artists/fea
       { path: 'game-design', component: GameDesignComponent },
       { path: 'architecture-directory', component: ArchitectureDirectoryComponent },
       { path: 'music-directory', component: MusicDirectoryComponent },
-
+      { path: 'music-directory/featured-artists/edit', component: EditFeaturedArtistsComponent },
       { matcher: (url) => OnlyMatchNumericBandIds(url), component: BandPageComponent },
       { path: '**', component: PageNotFoundComponent, pathMatch: 'full' },
     ],

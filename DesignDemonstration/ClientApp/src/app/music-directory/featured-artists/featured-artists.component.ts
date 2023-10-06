@@ -1,15 +1,15 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-featured-artists',
   templateUrl: './featured-artists.component.html',
-  styleUrls: ['./featured-artists.component.scss']
+  styleUrls: ['./featured-artists.component.scss'],
 })
 export class FeaturedArtistsComponent {
   @Input({required: true}) featuredArtistsInfo!: FeaturedArtistInfo[];
 
   constructor() {
-    
+
   }
 
 }

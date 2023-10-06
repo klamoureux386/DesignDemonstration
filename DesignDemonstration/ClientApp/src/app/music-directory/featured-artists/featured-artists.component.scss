@@ -6,6 +6,11 @@ $carousel-border-radius: 30px;
     border-radius: $carousel-border-radius;
     overflow: hidden;
     background-color: bisque;
+    min-height: 500px;
+}
+
+.carousel-indicators{
+    background-color: red;
 }
 
 $album-img-size: 500px;
@@ -31,4 +36,13 @@ $album-img-size: 500px;
 
 .carousel-caption {
     color: red;
+}
+
+.edit-icon {
+    position: relative;
+    top: 30px;
+    text-align: right;
+    margin-left: auto;
+    z-index: 20;
+    padding-right: 15px;
 }

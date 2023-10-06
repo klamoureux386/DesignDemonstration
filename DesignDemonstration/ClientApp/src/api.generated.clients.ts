@@ -438,6 +438,7 @@ export class FeaturedArtistDTO implements IFeaturedArtistDTO {
     bandName!: string;
     albumId!: number | undefined;
     description!: string;
+    imgSrc!: string;
 
     constructor(data?: IFeaturedArtistDTO) {
         if (data) {
@@ -454,6 +455,7 @@ export class FeaturedArtistDTO implements IFeaturedArtistDTO {
             this.bandName = _data["bandName"];
             this.albumId = _data["albumId"];
             this.description = _data["description"];
+            this.imgSrc = _data["imgSrc"];
         }
     }
 
@@ -470,6 +472,7 @@ export class FeaturedArtistDTO implements IFeaturedArtistDTO {
         data["bandName"] = this.bandName;
         data["albumId"] = this.albumId;
         data["description"] = this.description;
+        data["imgSrc"] = this.imgSrc;
         return data;
     }
 }
@@ -479,6 +482,7 @@ export interface IFeaturedArtistDTO {
     bandName: string;
     albumId: number | undefined;
     description: string;
+    imgSrc: string;
 }
 
 export class BandDTO implements IBandDTO {

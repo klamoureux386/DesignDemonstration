@@ -47,13 +47,14 @@ export class MusicDirectoryComponent implements OnInit {
 
     let infos: FeaturedArtistInfo[] = []
 
-    for(const artist of this.model.featuredArtists) {
-      infos.push(new FeaturedArtistInfo(artist.bandName, "../../assets/shiner-egg.jpg", artist.description))
-    }
+    // infos.push(new FeaturedArtistInfo("test1", "../../assets/shiner-egg.jpg", "description1"))
+    // infos.push(new FeaturedArtistInfo("test2", "../../assets/shiner-egg.jpg", "description2"))
+    // infos.push(new FeaturedArtistInfo("test3", "../../assets/shiner-egg.jpg", "description3"))
 
-    // infos.push(new FeaturedArtistInfo("Shiner", "../../assets/shiner-egg.jpg", "Shiner Description"));
-    // infos.push(new FeaturedArtistInfo("No Knife", "../../assets/no-knife-fire.jpg", "No Knife Description"));
-    // infos.push(new FeaturedArtistInfo("Rival Schools", "../../assets/rival-schools-united.jpg", "Rival Schools Description"));
+    for(const artist of this.model.featuredArtists) {
+      //infos.push(new FeaturedArtistInfo(artist.bandName, "../../assets/shiner-egg.jpg", artist.description))
+      infos.push(new FeaturedArtistInfo(artist.bandName, "../../" + artist.imgSrc, artist.description))
+    }
 
     this.featuredArtistsInfo = infos;
 

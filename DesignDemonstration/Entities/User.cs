@@ -13,6 +13,7 @@ namespace DesignDemonstration.Entities
         public string Email { get; set; } = "";
         public string Type { get; set; } = "";    //Staff, Critic, User, etc.
         public string? DisplayName { get; set; }
+        public bool isAdmin { get; set; }
 
         public ICollection<SongRating> SongRatings { get; set; } = new List<SongRating>();
         public ICollection<AlbumRating> AlbumsRatings { get; set; } = new List<AlbumRating>();

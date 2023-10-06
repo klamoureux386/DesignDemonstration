@@ -1,0 +1,17 @@
+<p>edit-featured-artists works!</p>
+
+<ngb-carousel [interval]="0">
+	<ng-template ngbSlide *ngFor="let info of featuredArtistsInfo">
+		
+		<img [src]="info.imgSrc" class="album-img"  alt="Random first slide" />
+			
+		<div class="artist-details">
+			<h3>{{info.bandName}}</h3>
+			<p>{{info.description}}</p>
+		</div>
+
+		<div class="carousel-caption">
+
+		</div>
+	</ng-template>
+</ngb-carousel>

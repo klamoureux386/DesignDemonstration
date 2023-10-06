@@ -1,23 +1,24 @@
-<p>featured-artists works!</p>
+<!-- <p>featured-artists works!</p> -->
+
+<!-- <p class="edit-icon">test right text</p> -->
+
+<div class="edit-icon">
+	<i class="bi-alarm" style="color: red;">Edit</i>
+</div>
 
 <!-- To do: use ngb carousel as base for multi-page featured artist section -->
 <ngb-carousel [interval]="0">
 	<ng-template ngbSlide *ngFor="let info of featuredArtistsInfo">
 		
-		<img [src]="info.imgSrc" class="album-img"  alt="Random first slide" />
+		<img [src]="info.imgSrc" class="album-img" alt="First slide" />
 			
 		<div class="artist-details">
 			<h3>{{info.bandName}}</h3>
 			<p>{{info.description}}</p>
 		</div>
-		<!-- <div class="artist-details">
-			
-		</div> -->
-		<!-- <div class="artist-details"> 
-			float right
-		</div> -->
-		<div class="carousel-caption">
 
+		<div class="carousel-caption">
+			caption
 		</div>
 	</ng-template>
 </ngb-carousel>

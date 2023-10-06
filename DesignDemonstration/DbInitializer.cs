@@ -26,17 +26,17 @@ namespace DesignDemonstration
             AddFeaturedArtists(context);
 
 
-            void AddUsers(DataContext context) 
+            void AddUsers(DataContext context)
             {
-                if (context.Users.Any()) 
+                if (context.Users.Any())
                 {
                     return; // DB has been seeded
                 }
 
                 var users = new List<User>();
 
-                users.AddRange( new List<User>() {
-                    new User() { Id = 1, Username = "Halifex", Email = "klamoureux386@gmail.com", Type = "Staff", DisplayName = "Kyle Lamoureux" }
+                users.AddRange(new List<User>() {
+                    new User() { Id = 1, Username = "Halifex", Email = "klamoureux386@gmail.com", Type = "Staff", DisplayName = "Kyle Lamoureux", isAdmin = true }
                 });
 
                 context.AddRange(users);
@@ -82,7 +82,7 @@ namespace DesignDemonstration
 
                 //Rival Schools
                 albums.AddRange(new List<Album>
-                { 
+                {
                     new Album { Id = 5, Title = "United by Fate", Bands = new List<Band> { RivalSchools } },
                     new Album { Id = 6, Title = "Pedals", Bands = new List<Band> { RivalSchools } },
                     new Album { Id = 7, Title = "Found", Bands = new List<Band> { RivalSchools } },
@@ -146,16 +146,39 @@ namespace DesignDemonstration
                 AddRivalSchoolsSongs(context);
             }
 
-            void AddFeaturedArtists(DataContext context) 
+            void AddFeaturedArtists(DataContext context)
             {
-                var featuredArtist = new FeaturedArtist();
+                var featuredArtists = new List<FeaturedArtist>();
 
-                featuredArtist.BandId = 1; //No Knife
-                featuredArtist.AlbumId = 3; //Fire in the City
-                featuredArtist.Description = "This is the featured artist description for No Knife's Fire in the City of Automatons.";
-                featuredArtist.StartDate = new DateTime(2023, 9, 30);
+                featuredArtists.AddRange(new List<FeaturedArtist>
+                {
+                    new FeaturedArtist {
+                        BandId = 1,//No Knife
+                        AlbumId = 3, //Fire in the City
+                        Description = "This is the featured artist description for No Knife's Fire in the City of Automatons.",
+                        StartDate = new DateTime(2023, 9, 30),
+                        ImgSrc = "assets/no-knife-fire.jpg",
+                    },
 
-                context.FeaturedArtists.Add(featuredArtist);
+                    new FeaturedArtist {
+                        BandId = 2, //Rival Schools
+                        AlbumId = 5, //United by Fate
+                        Description = "This is the featured artist description for Rival Schools's United by Fate.",
+                        StartDate = new DateTime(2023, 9, 30),
+                        ImgSrc = "assets/rival-schools-united.jpg",
+                    },
+
+                    new FeaturedArtist {
+                        BandId = 1, //No Knife
+                        AlbumId = 5, //Riot for Romance
+                        Description = "This is the featured artist description for No Knife's Riot for Romance.",
+                        StartDate = new DateTime(2023, 9, 30),
+                        ImgSrc = "assets/shiner-egg.jpg",
+                    }
+
+                });
+
+                context.FeaturedArtists.AddRange(featuredArtists);
                 context.SaveChanges();
 
             }
