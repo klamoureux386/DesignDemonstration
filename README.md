@@ -1,6 +1,6 @@
 # DesignDemonstration
 
-This is a small project to demonstate best practices and personal approaches to architecting a web app (in progress!).
+This is a small project to demonstrate best practices and personal approaches to architecting a web app (in progress!).
 
 Stack & Tools:
 - ASP.NET w/ EF Core 7
