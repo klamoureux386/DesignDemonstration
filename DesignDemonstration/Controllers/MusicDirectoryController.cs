@@ -32,7 +32,7 @@ namespace DesignDemonstration.Controllers
         {
             var model = new MusicDirectoryViewModel();
 
-            model.FeaturedArtists = await _featuredArtistsService.GetFeaturedArtists();
+            model.FeaturedArtists = await _featuredArtistsService.GetAllFeaturedArtists();
             model.Bands = await _bandsService.GetAllBands();
 
             return model;
