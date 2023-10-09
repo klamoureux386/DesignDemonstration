@@ -87,8 +87,8 @@ export class FeatherForecastClient implements IFeatherForecastClient {
 }
 
 export interface IFeaturedArtistClient {
-    getFeaturedArtist(id: number): Observable<FeaturedArtistDTO>;
-    getAllFeaturedArtists(): Observable<FeaturedArtistDTO[]>;
+    get(id: number): Observable<FeaturedArtistDTO>;
+    getAll(): Observable<FeaturedArtistDTO[]>;
 }
 
 @Injectable()
@@ -102,7 +102,7 @@ export class FeaturedArtistClient implements IFeaturedArtistClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getFeaturedArtist(id: number): Observable<FeaturedArtistDTO> {
+    get(id: number): Observable<FeaturedArtistDTO> {
         let url_ = this.baseUrl + "/api/FeaturedArtist/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -118,11 +118,11 @@ export class FeaturedArtistClient implements IFeaturedArtistClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetFeaturedArtist(response_);
+            return this.processGet(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetFeaturedArtist(response_ as any);
+                    return this.processGet(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<FeaturedArtistDTO>;
                 }
@@ -131,7 +131,7 @@ export class FeaturedArtistClient implements IFeaturedArtistClient {
         }));
     }
 
-    protected processGetFeaturedArtist(response: HttpResponseBase): Observable<FeaturedArtistDTO> {
+    protected processGet(response: HttpResponseBase): Observable<FeaturedArtistDTO> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -153,7 +153,7 @@ export class FeaturedArtistClient implements IFeaturedArtistClient {
         return _observableOf(null as any);
     }
 
-    getAllFeaturedArtists(): Observable<FeaturedArtistDTO[]> {
+    getAll(): Observable<FeaturedArtistDTO[]> {
         let url_ = this.baseUrl + "/api/FeaturedArtist/All";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -166,11 +166,11 @@ export class FeaturedArtistClient implements IFeaturedArtistClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAllFeaturedArtists(response_);
+            return this.processGetAll(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetAllFeaturedArtists(response_ as any);
+                    return this.processGetAll(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<FeaturedArtistDTO[]>;
                 }
@@ -179,7 +179,7 @@ export class FeaturedArtistClient implements IFeaturedArtistClient {
         }));
     }
 
-    protected processGetAllFeaturedArtists(response: HttpResponseBase): Observable<FeaturedArtistDTO[]> {
+    protected processGetAll(response: HttpResponseBase): Observable<FeaturedArtistDTO[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :

@@ -1,24 +1,23 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FeaturedArtistInfo } from '../featured-artists.component';
-import { MusicDirectoryClient } from 'src/api.generated.clients';
+import { FeaturedArtistClient } from 'src/api.generated.clients';
 
 @Component({
   selector: 'app-edit-featured-artists',
   templateUrl: './edit-featured-artists.component.html',
   styleUrls: ['./edit-featured-artists.component.css'],
-  providers: [MusicDirectoryClient]
+  providers: [FeaturedArtistClient]
 })
 export class EditFeaturedArtistsComponent implements OnInit {
   featuredArtistsInfo!: FeaturedArtistInfo[];
 
-  constructor(private featuredArtistClient: MusicDirectoryClient) {
+  constructor(private featuredArtistClient: FeaturedArtistClient) {
 
   }
 
   ngOnInit() {
-    //To do: change this to featured artist controller
     this.featuredArtistClient.getAll().subscribe(res => {
-      res.map(b => b) 
+      this.featuredArtistsInfo = res.map(b => new FeaturedArtistInfo(b.bandName, b.imgSrc, b.description)); 
     })
   }
 }

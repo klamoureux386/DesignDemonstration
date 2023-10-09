@@ -4,7 +4,8 @@ namespace DesignDemonstration.Interfaces
 {
     public interface IFeaturedArtistsService
     {
-        public Task<FeaturedArtistDTO> GetFeaturedArtist(int id);
-        public Task<List<FeaturedArtistDTO>> GetAllFeaturedArtists();
+        public Task<FeaturedArtistDTO> Get(int id);
+        public Task<List<FeaturedArtistDTO>> Get(IEnumerable<int> ids);
+        public Task<List<FeaturedArtistDTO>> GetAll();
     }
 }

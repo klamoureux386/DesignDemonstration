@@ -20,17 +20,17 @@ namespace DesignDemonstration.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<FeaturedArtistDTO> GetFeaturedArtist(int id)
+        public async Task<FeaturedArtistDTO> Get(int id)
         {
-            var artist = await _featuredArtistsService.GetFeaturedArtist(id);
+            var artist = await _featuredArtistsService.Get(id);
 
             return artist;
         }
 
         [HttpGet("All")]
-        public async Task<List<FeaturedArtistDTO>> GetAllFeaturedArtists()
+        public async Task<List<FeaturedArtistDTO>> GetAll()
         {
-            var dtos = await _featuredArtistsService.GetAllFeaturedArtists();
+            var dtos = await _featuredArtistsService.GetAll();
 
             return dtos;
         }

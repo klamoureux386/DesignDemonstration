@@ -14,21 +14,21 @@ namespace DesignDemonstration.Services
             _context = context;
         }
 
-        public async Task<FeaturedArtistDTO> GetFeaturedArtist(int id) 
+        public async Task<FeaturedArtistDTO> Get(int id) 
         {
-            var artist = await _context.FeaturedArtists.Include(e => e.Band).Where(e => e.Id == id).Select(e => new FeaturedArtistDTO(e)).FirstAsync();
+            var artists = await Get(new List<int> { id });
 
-            return artist;
+            return artists.First();
         }
 
-        public async Task<List<FeaturedArtistDTO>> GetFeaturedArtists(IEnumerable<int> ids) 
+        public async Task<List<FeaturedArtistDTO>> Get(IEnumerable<int> ids) 
         {
             var artists = await _context.FeaturedArtists.Include(e => e.Band).Where(e => ids.Contains(e.Id)).Select(e => new FeaturedArtistDTO(e)).ToListAsync();
 
             return artists;
         }
 
-        public async Task<List<FeaturedArtistDTO>> GetAllFeaturedArtists()
+        public async Task<List<FeaturedArtistDTO>> GetAll()
         {
             var artists = await _context.FeaturedArtists.Include(e => e.Band).Select(e => new FeaturedArtistDTO(e)).ToListAsync();
 
