@@ -4,7 +4,7 @@ import { MusicDirectoryClient } from 'src/api.generated.clients';
 @Component({
   selector: 'app-band-page',
   templateUrl: './band-page.component.html',
-  styleUrls: ['./band-page.component.css'],
+  styleUrls: ['./band-page.component.scss'],
   providers: [MusicDirectoryClient]
 })
 export class BandPageComponent implements OnInit {

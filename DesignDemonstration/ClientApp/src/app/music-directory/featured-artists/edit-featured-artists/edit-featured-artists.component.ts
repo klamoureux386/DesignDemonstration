@@ -5,7 +5,7 @@ import { FeaturedArtistClient } from 'src/api.generated.clients';
 @Component({
   selector: 'app-edit-featured-artists',
   templateUrl: './edit-featured-artists.component.html',
-  styleUrls: ['./edit-featured-artists.component.css'],
+  styleUrls: ['./edit-featured-artists.component.scss'],
   providers: [FeaturedArtistClient]
 })
 export class EditFeaturedArtistsComponent implements OnInit {

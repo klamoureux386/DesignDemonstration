@@ -6,7 +6,7 @@ import { FeaturedArtistInfo } from './featured-artists/featured-artists.componen
 @Component({
   selector: 'app-music-directory',
   templateUrl: './music-directory.component.html',
-  styleUrls: ['./music-directory.component.css'],
+  styleUrls: ['./music-directory.component.scss'],
   providers: [MusicDirectoryClient]
 })
 export class MusicDirectoryComponent implements OnInit {
