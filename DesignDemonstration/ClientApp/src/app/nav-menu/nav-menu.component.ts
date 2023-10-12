@@ -7,6 +7,14 @@ import { Component } from '@angular/core';
 })
 export class NavMenuComponent {
   isExpanded = false;
+  isDarkMode = false;
+
+  getTheme(): string {
+    if (this.isDarkMode)
+      return "dark"
+    else
+      return "light"
+  }
 
   collapse() {
     this.isExpanded = false;

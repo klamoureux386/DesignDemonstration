@@ -17,6 +17,7 @@ import { BandPageComponent } from './band-page/band-page.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FeaturedArtistsComponent } from './music-directory/featured-artists/featured-artists.component';
 import { EditFeaturedArtistsComponent } from './music-directory/featured-artists/edit-featured-artists/edit-featured-artists.component';
+import { ThemeTogglerComponent } from './theme-toggler/theme-toggler.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { EditFeaturedArtistsComponent } from './music-directory/featured-artists
     BandPageComponent,
     FeaturedArtistsComponent,
     EditFeaturedArtistsComponent,
+    ThemeTogglerComponent,
   ],
   imports: [
     BrowserModule,

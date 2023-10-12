@@ -1,0 +1,51 @@
+
+.oval {
+    position: relative;
+    margin: 10px;
+    width: 50px;
+    height: 25px;
+    border-radius: 25px;
+    background-color: #0275d8;
+    -webkit-transition: background-color 0.15s ease-in-out;
+    transition: background-color 0.15s ease-in-out;
+}
+  
+.ovalSelected {
+    background: #fadc04;
+}
+  
+.button {
+    position: absolute;
+    margin-top: 2.5px;
+    margin-left: 2.5px;
+    left: 0px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #f7f7f7;
+    -webkit-transition: left 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    transition: left 0.15s ease-in-out, background-color 0.15s ease-in-out;
+}
+
+.button-moon {
+    position: relative;
+    width: 15px; 
+    height: 15px;
+    //Slight offset towards left
+    left: 2px;
+    bottom: 4.5px;
+}
+  
+.buttonSelected {
+    left: 25px;
+    background-color: #e49d1a;
+}
+
+.button-sun {
+    position: relative;
+    width: 15px; 
+    height: 15px;
+    //Slight offset towards right
+    left: 3px;
+    bottom: 4.5px;
+}

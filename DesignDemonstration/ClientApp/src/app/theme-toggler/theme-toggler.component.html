@@ -1,0 +1,8 @@
+<!-- https://medium.com/@tommatthews_14845/angular-bootstrap-with-dark-mode-toggle-4539ede28e16 -->
+<!-- https://redstapler.co/pure-css-minimal-dark-mode-toggle-button/ -->
+<div class="oval" [ngClass]="{ovalSelected: isLightMode()}" (click)="toggleTheme()">
+    <div class="button" [ngClass]="{buttonSelected: isLightMode()}">
+        <img *ngIf="!isLightMode()" class="button-moon" src="assets/moon.svg">
+        <img *ngIf="isLightMode()" class="button-sun" src="assets/sun.svg">
+    </div>
+</div>

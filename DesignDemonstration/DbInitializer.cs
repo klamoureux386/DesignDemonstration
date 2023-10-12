@@ -173,7 +173,7 @@ namespace DesignDemonstration
                         AlbumId = 5, //Riot for Romance
                         Description = "This is the featured artist description for No Knife's Riot for Romance.",
                         StartDate = new DateTime(2023, 9, 30),
-                        ImgSrc = "assets/shiner-egg.jpg",
+                        ImgSrc = "assets/no-knife-riot.jpg",
                     }
 
                 });
