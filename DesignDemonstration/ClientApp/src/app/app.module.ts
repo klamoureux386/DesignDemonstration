@@ -18,6 +18,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FeaturedArtistsComponent } from './music-directory/featured-artists/featured-artists.component';
 import { EditFeaturedArtistsComponent } from './music-directory/featured-artists/edit-featured-artists/edit-featured-artists.component';
 import { ThemeTogglerComponent } from './theme-toggler/theme-toggler.component';
+import { ArticleTemplateComponent } from './architecture-directory/article-template/article-template.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ThemeTogglerComponent } from './theme-toggler/theme-toggler.component';
     FeaturedArtistsComponent,
     EditFeaturedArtistsComponent,
     ThemeTogglerComponent,
+    ArticleTemplateComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,6 +45,7 @@ import { ThemeTogglerComponent } from './theme-toggler/theme-toggler.component';
       { path: 'fetch', component: FetchDataComponent }, //Remove
       { path: 'game-design', component: GameDesignComponent },
       { path: 'architecture-directory', component: ArchitectureDirectoryComponent },
+      { path: 'architecture-directory/article/1', component: ArticleTemplateComponent },
       { path: 'music-directory', component: MusicDirectoryComponent },
       { path: 'music-directory/featured-artists/edit', component: EditFeaturedArtistsComponent },
       { matcher: (url) => OnlyMatchNumericBandIds(url), component: BandPageComponent },

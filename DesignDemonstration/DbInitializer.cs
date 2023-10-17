@@ -25,6 +25,8 @@ namespace DesignDemonstration
 
             AddFeaturedArtists(context);
 
+            AddArticles(context);
+
 
             void AddUsers(DataContext context)
             {
@@ -318,6 +320,26 @@ namespace DesignDemonstration
             void AddRivalSchoolsSongs(DataContext context) 
             {
                 return;
+            }
+
+            void AddArticles(DataContext context) 
+            {
+                if (context.ArticleTemplate.Any())
+                {
+                    return;
+                }
+
+                var article = new Article();
+                article.Id = 1;
+                article.Text = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "ArticleTexts\\QueryProjection.txt"));
+                article.ImgSrcs.Add("ProjectedQuerySelect1.png");
+                article.ImgSrcs.Add("ProjectedQuerySelectDTOConstructor.png");
+                article.ImgSrcs.Add("ProjectedQuerySelect2.png");
+                article.ImgSrcs.Add("ProjectedQuerySelectDTOConstructorParameterized.png");
+                article.ImgSrcs.Add("ProjectedQuerySelect3.png");
+
+                context.ArticleTemplate.Add(article);
+                context.SaveChanges();
             }
         }
     }

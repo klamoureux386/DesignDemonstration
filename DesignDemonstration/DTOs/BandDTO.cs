@@ -6,12 +6,12 @@ namespace DesignDemonstration.DTOs
     {
         public BandDTO() { }
 
-        public BandDTO(Band band) 
+        public BandDTO(int id, string name, ICollection<int> albumIds, ICollection<int> musicianIds) 
         {
-            Id = band.Id;
-            Name = band.Name;
-            AlbumIds = band.Albums.Select(a => a.Id).ToList();
-            MusicianIds = band.Musicians.Select(a => a.Id).ToList();
+            Id = id;
+            Name = name;
+            AlbumIds = albumIds;
+            MusicianIds = musicianIds;
         }
 
         public int Id { get; set; }

@@ -1,12 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DesignDemonstration.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Text.Json;
 
-namespace DesignDemonstration.Entities
+namespace DesignDemonstration
 {
     public class DataContext : DbContext
     {
         public DbSet<Album> Albums { get; set; }
         public DbSet<AlbumSongs> AlbumSongs { get; set; }
         public DbSet<AlbumRating> AlbumRatings { get; set; }
+        public DbSet<Article> ArticleTemplate { get; set; }
         public DbSet<Band> Bands { get; set; }
         public DbSet<FeaturedArtist> FeaturedArtists { get; set; }
         public DbSet<Musician> Musicians { get; set; }
@@ -17,12 +21,12 @@ namespace DesignDemonstration.Entities
 
         public string DbPath { get; }
 
-        public DataContext(DbContextOptions<DataContext> options) 
-            : base(options) 
+        public DataContext(DbContextOptions<DataContext> options)
+            : base(options)
         {
             var folder = Environment.SpecialFolder.LocalApplicationData;
             var path = Environment.GetFolderPath(folder);
-            DbPath = System.IO.Path.Join(path, "music.db");
+            DbPath = Path.Join(path, "music.db");
         }
 
         // The following configures EF to create a Sqlite database file in the
@@ -62,6 +66,17 @@ namespace DesignDemonstration.Entities
                 .HasMany(e => e.Bands)
                 .WithMany(e => e.Songs)
                 .UsingEntity<SongBands>();
+
+            //ArticleTemplate serialization setup
+            //https://learn.microsoft.com/en-us/ef/core/modeling/value-comparers?tabs=ef5#mutable-classes
+            modelBuilder.Entity<Article>()
+                .Property(e => e.ImgSrcs)
+                .HasConversion(v => System.Text.Json.JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+                               v => System.Text.Json.JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null),
+                               new ValueComparer<List<string>>(
+                                (c1, c2) => c1.SequenceEqual(c2),
+                                c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                                c => c.ToList()));
         }
     }
 }

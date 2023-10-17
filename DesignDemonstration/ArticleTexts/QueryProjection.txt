@@ -1,0 +1,75 @@
+﻿One of the key features of efficient queries in EF is the use of <a href="https://learn.microsoft.com/en-us/ef/core/performance/efficient-querying#project-only-properties-you-need">projection</a>
+which limits the columns that get included in the SELECT portion of the generated SQL query. This requires the
+columns to be explicitly declared within a .Select() statement when forming the query:
+<Image[0]>
+<br>
+Note: Since we have multiple same-level .Include() statements, this query is a candidate for being made into a
+split query to prevent Catesian explosion. Whether or not a request should be split into multiple queries should
+be determined on a per-query performance basis. In this case, since there's only a small amount of associated data
+being joined, it makes more sense to keep it as a single request.
+<br>
+<br>
+From the generated SQL on the right, we can see that only columns used within the .Select() are retrieved from the
+database. Of course, having to specify everything in a parameterless constructor whenever we want to pull data
+for an entity is a huge pain. The next logical thought would be to move this logic to the constructor for the
+BandDTO so that we can just pass a Band and achieve the same result:
+<br>
+<Image[1]>
+<br>
+<br>
+However, if we modify our .Select() statement to make use of our new constructor and check the generated SQL, we
+see that the query has gone back to SELECT'ing everything from all related entities:
+<br>
+<Image[2]>
+<br>
+<br>
+Oh no! What gives? From the projection documentation linked above, "If you need to project out more than one 
+column, project out to a C# anonymous type with the properties you want." From here, there's two options to
+enforce consistency when intializing objects.
+<br>
+<br>
+My preferred approach is to use a more verbose constructor where we have a parameter per property:
+<br>
+<Image[3]>
+<br>
+<br>
+With this, the generated SQL query has returned to only including a limited number of fields in the SELECT:
+<br>
+<Image[4]>
+<br>
+<br>
+The only downside of this is that the responsibility of actually getting that data -- such as having to call
+Albums.Select(a => a.Id).ToList() in order to get AlbumIds -- is decentralized because we're having to do it
+in the lambda prior to passing it to the constructor. This isn't so bad for something obvious like AlbumIds,
+but envision the following scenario:
+<br>
+<br>
+Imagine a "Featured Artist" section on a music platform; the section has an image which may either be a picture
+of a band, a picture of one of their albums, or an entirely unrelated picture such as a promotional image. We can
+treat the order of priority from most-to-least specific, e.g.
+unique promotional image --> related album image --> overall picture of the band
+<br>
+<br>
+In code, we might represent this as the following as a property on the FeaturedArtistDTO:
+<br>
+<i>ImgSrc = featuredArtist.ImgSrc ?? featuredArtist.Album?.ImgSrc ?? featuredArtist.Band.ImgSrc;</i>
+<br>
+<br>
+We could go back to passing a FeaturedArtist entity to a constructor in the DTO to centralize this logic, but then
+we lose out on the ability to project our query. Though, having to remember/reference this logic in the .Select()
+statements everywhere we want to form a FeaturedArtistDTO using projection is also a huge pain.
+<br>
+<br>
+For me, this was a sign that the way I populate the ImgSrc in the DTO should change. Rather than deriving the 
+ImgSrc from the various related entities, I decided it should just be its own column on the entity/table
+so it can be mapped directly. This moves the responsibility of that logic to the write of the entity rather than
+the read. We would also need to do a quick consistency check between ImgSrc columns if a Band or Album's ImgSrc is
+updated and was referenced in a feature, but, in my opinion, this is a smaller price to pay than having to repeat
+the more complicated logic of determining the ImgSrc on read.
+<br>
+<br>
+The other option is to use AutoMapper's <a href="https://docs.automapper.org/en/stable/Queryable-Extensions.html">.ProjectTo</a>
+method and set up custom projection rules. I'm relatively averse to AutoMapper due to it resulting in runtime 
+errors rather than compile time errors -- and also being heavily prone to developer misuse -- but this could 
+be a feasible option in the scenario that your mapping logic is very complicated and also unable to be 
+redesigned like we did in the previous example.

@@ -1,5 +1,4 @@
 ﻿using DesignDemonstration.DTOs;
-using DesignDemonstration.Entities;
 using DesignDemonstration.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,14 +15,15 @@ namespace DesignDemonstration.Services
 
         public async Task<List<BandDTO>> GetAllBands()
         {
-            var bands = await _context.Bands
+            return await _context.Bands
                 .Include(b => b.Albums)
                 .Include(b => b.Musicians)
-                .ToListAsync();
-
-            var dtos = bands.Select(b => new BandDTO(b)).ToList();
-
-            return dtos;
+                .Select(b => new BandDTO(
+                    b.Id,
+                    b.Name,
+                    b.Albums.Select(a => a.Id).ToList(),
+                    b.Musicians.Select(m => m.Id).ToList()
+                )).ToListAsync();
         }
 
         public async Task<BandDTO> GetBand(int id)
@@ -37,14 +37,16 @@ namespace DesignDemonstration.Services
 
         public async Task<List<BandDTO>> GetBands(IEnumerable<int> ids)
         {
-            var bands = await _context.Bands.Where(b => ids.Contains(b.Id))
+            return await _context.Bands
+                .Where(b => ids.Contains(b.Id))
                 .Include(b => b.Albums)
                 .Include(b => b.Musicians)
-                .ToListAsync();
-
-            var dtos = bands.Select(b => new BandDTO(b)).ToList();
-
-            return dtos;
+                .Select(b => new BandDTO(
+                    b.Id,
+                    b.Name,
+                    b.Albums.Select(a => a.Id).ToList(),
+                    b.Musicians.Select(m => m.Id).ToList()
+                )).ToListAsync();
         }
     }
 }

@@ -1,7 +1,10 @@
-﻿namespace DesignDemonstration.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace DesignDemonstration.Entities
 {
     public class FeaturedArtist
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int BandId { get; set; }
         public int? AlbumId { get; set; }

@@ -15,6 +15,73 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
+export interface IArticleClient {
+    get(id: number): Observable<ArticleDTO>;
+}
+
+@Injectable()
+export class ArticleClient implements IArticleClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    get(id: number): Observable<ArticleDTO> {
+        let url_ = this.baseUrl + "/api/Article/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ArticleDTO>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ArticleDTO>;
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<ArticleDTO> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ArticleDTO.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface IFeatherForecastClient {
     get(): Observable<WeatherForecast[]>;
 }
@@ -450,6 +517,54 @@ export class WeatherForecastClient implements IWeatherForecastClient {
         }
         return _observableOf(null as any);
     }
+}
+
+export class ArticleDTO implements IArticleDTO {
+    text!: string;
+    imgSrcs!: string[];
+
+    constructor(data?: IArticleDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.text = _data["text"];
+            if (Array.isArray(_data["imgSrcs"])) {
+                this.imgSrcs = [] as any;
+                for (let item of _data["imgSrcs"])
+                    this.imgSrcs!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ArticleDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new ArticleDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["text"] = this.text;
+        if (Array.isArray(this.imgSrcs)) {
+            data["imgSrcs"] = [];
+            for (let item of this.imgSrcs)
+                data["imgSrcs"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IArticleDTO {
+    text: string;
+    imgSrcs: string[];
 }
 
 export class WeatherForecast implements IWeatherForecast {

@@ -1,4 +1,3 @@
-using DesignDemonstration.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
 using NSwag.CodeGeneration.TypeScript;
@@ -86,4 +85,5 @@ void ConfigureServices(IServiceCollection services)
 
     services.AddScoped<IBandsService, BandsService>();
     services.AddScoped<IFeaturedArtistsService, FeaturedArtistsService>();
+    services.AddScoped<IArticleService, ArticleService>();
 }
