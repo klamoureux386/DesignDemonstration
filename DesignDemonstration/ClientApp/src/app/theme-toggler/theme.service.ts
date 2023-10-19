@@ -6,10 +6,14 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class ThemeService {
 
-  themeName: string = 'dark';
+  private themeName: string = 'dark';
   public selectedTheme: BehaviorSubject<string> = new BehaviorSubject<string>(this.themeName);
 
   constructor() { }
+
+  getTheme() {
+    return this.selectedTheme.value;
+  }
 
   setTheme(name: string) {
     if (this.isValidThemeName(name))

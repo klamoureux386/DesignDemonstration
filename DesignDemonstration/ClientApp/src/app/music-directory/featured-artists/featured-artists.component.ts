@@ -1,5 +1,5 @@
-import { Component, Input, ViewEncapsulation } from '@angular/core';
-import { BandDTO } from 'src/api.generated.clients';
+import { Component, Input } from '@angular/core';
+import { ThemeService } from 'src/app/theme-toggler/theme.service';
 
 @Component({
   selector: 'app-featured-artists',
@@ -9,7 +9,8 @@ import { BandDTO } from 'src/api.generated.clients';
 export class FeaturedArtistsComponent {
   @Input({required: true}) featuredArtistsInfo!: FeaturedArtistInfo[];
 
-  constructor() {
+
+  constructor(public themeService: ThemeService) {
 
   }
 

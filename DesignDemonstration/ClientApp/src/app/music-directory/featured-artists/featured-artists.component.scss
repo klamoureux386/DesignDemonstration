@@ -1,16 +1,21 @@
 $carousel-border-size: 2px;
 $carousel-border-radius: 30px;
 
-.carousel {
+.carousel-dark {
+    border: $carousel-border-size solid black;
+    border-radius: $carousel-border-radius;
+    overflow: hidden;
+    color: black;
+    background-color: lightgrey;
+    min-height: 500px;
+}
+
+.carousel-light {
     border: $carousel-border-size solid black;
     border-radius: $carousel-border-radius;
     overflow: hidden;
     background-color: bisque;
     min-height: 500px;
-}
-
-.carousel-indicators{
-    background-color: red;
 }
 
 $album-img-size: 500px;
@@ -26,10 +31,6 @@ $album-img-size: 500px;
 .artist-details {
     text-align: center;
     padding-top: 20px;
-}
-
-.carousel-caption {
-    color: red;
 }
 
 .edit-icon {

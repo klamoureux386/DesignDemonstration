@@ -11,7 +11,6 @@ import { ArticleClient, ArticleDTO } from 'src/api.generated.clients';
 export class ArticleTemplateComponent implements AfterViewInit {
 
   public article: ArticleDTO = new ArticleDTO();
-  //Swap to viewChild?
   public templateDiv: HTMLElement | null = null;
 
   constructor(private articleClient: ArticleClient) {

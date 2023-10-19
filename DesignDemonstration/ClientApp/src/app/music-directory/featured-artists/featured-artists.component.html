@@ -1,13 +1,8 @@
-<!-- <p>featured-artists works!</p> -->
-
-<!-- <p class="edit-icon">test right text</p> -->
-
 <div class="edit-icon">
 	<i class="bi-pencil-fill" style="color: red; cursor: pointer;" routerLink="featured-artists/edit">Edit</i>
 </div>
 
-<!-- To do: use ngb carousel as base for multi-page featured artist section -->
-<ngb-carousel [interval]="0">
+<ngb-carousel [ngClass]="this.themeService.getTheme() == 'dark' ? 'carousel-dark' : 'carousel-light'" [interval]="0">
 	<ng-template ngbSlide *ngFor="let info of featuredArtistsInfo">
 		
 		<img [src]="info.imgSrc" class="album-img" alt="First slide" />
