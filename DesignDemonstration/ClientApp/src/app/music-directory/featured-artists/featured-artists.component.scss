@@ -34,10 +34,7 @@ $album-img-size: 500px;
 }
 
 .edit-icon {
-    position: relative;
-    top: 30px;
-    text-align: right;
-    margin-left: auto;
+    position: absolute;
+    right: 15px;
     z-index: 20;
-    padding-right: 15px;
 }

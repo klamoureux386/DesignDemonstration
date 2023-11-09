@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { ThemeService } from 'src/app/theme-toggler/theme.service';
+import { ThemeService } from 'src/app/nav-menu/theme-toggler/theme.service';
+import { UserService } from 'src/app/user.service';
 
 @Component({
   selector: 'app-featured-artists',
@@ -10,7 +11,8 @@ export class FeaturedArtistsComponent {
   @Input({required: true}) featuredArtistsInfo!: FeaturedArtistInfo[];
 
 
-  constructor(public themeService: ThemeService) {
+  constructor(public themeService: ThemeService,
+    public userService: UserService) {
 
   }
 
