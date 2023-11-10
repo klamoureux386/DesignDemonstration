@@ -1,4 +1,4 @@
-<ngb-carousel [ngClass]="this.themeService.getTheme() == 'dark' ? 'carousel-dark' : 'carousel-light'" [interval]="0">
+<ngb-carousel [ngClass]="this.themeService.getTheme() == 'dark' ? 'carousel-dark' : 'carousel-light'" [interval]="7000">
 	<ng-template ngbSlide *ngFor="let info of featuredArtistsInfo">
 
 		<i *ngIf="userService.isAdmin" class="edit-icon bi-pencil-fill" style="color: red; cursor: pointer;" routerLink="featured-artists/edit">Edit</i>
