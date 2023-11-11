@@ -1,0 +1,42 @@
+.dark-bg{
+    background-image: url(../../assets/dark-homepage-bg-fit.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    //minus header (62px)
+    height: calc(100vh - 62px);
+    height: -o-calc(100vh - 62px); /* opera */
+    height: -moz-calc(100vh - 62px); /* firefox */
+    height: -webkit-calc(100vh - 62px); /* google, safari */
+
+    -webkit-transition: background-image 0.35s ease-in-out;
+    transition: background-image 0.35s ease-in-out;
+
+}
+
+.light-bg{
+    background-image: url(../../assets/light-homepage-bg-fit.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    //minus header (62px)
+    height: calc(100vh - 62px);
+    height: -o-calc(100vh - 62px); /* opera */
+    height: -moz-calc(100vh - 62px); /* firefox */
+    height: -webkit-calc(100vh - 62px); /* google, safari */
+
+    -webkit-transition: background-image 0.35s ease-in-out;
+    transition: background-image 0.35s ease-in-out;
+}
+
+.title {
+    position: relative;
+    top: 25%;
+    left: 20%;
+}
+
+.caption {
+    position: relative;
+    top: 30%;
+    left: 10%;
+    max-width: 30%;
+    text-align: center;
+}

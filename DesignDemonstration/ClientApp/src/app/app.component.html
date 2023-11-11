@@ -1,6 +1,6 @@
 <body>
   <app-nav-menu></app-nav-menu>
-  <main class="container">
+  <main [ngClass]="useFluidContainer() ? 'container-fluid p-0 overflow-hidden' : 'container'">
     <router-outlet></router-outlet>
   </main>
 </body>

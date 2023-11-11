@@ -1,2 +1,15 @@
-<h1>Hello, world!</h1>
-<p>This is an in-progress space for showcasing programming problems/practices I've found interesting, game design devlogs, and music I'm passionate about.</p>
+<div [ngClass]="themeService.isDarkTheme() ? 'dark-bg' : 'light-bg'">
+
+<div class="title">
+    <h1>Hello, world!</h1>
+</div>
+<p class="caption">This is an in-progress space for showcasing programming problems/design practices I've found interesting, game design devlogs, and music I'm passionate about.</p>
+
+<!-- <div class="imgbox">
+    <img class="homepage-bg" [src]="themeService.isDarkTheme() ? 'assets/dark-homepage-bg.jpg' : 'assets/light-homepage-bg.jpg'">
+</div> -->
+
+<!-- Image by <a href="https://www.freepik.com/free-photo/flat-lay-workstation-with-copy-space-laptop_6740634.htm#query=portfolio%20background&position=1&from_view=keyword&track=ais">Freepik</a> -->
+<!-- Photo by <a href="https://unsplash.com/@fempreneurstyledstock?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Leone Venter</a> on <a href="https://unsplash.com/photos/magic-keyboard-beside-mug-and-click-pen-VieM9BdZKFo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>-->
+
+</div>
